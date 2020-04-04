@@ -6,13 +6,10 @@
       <div class="row">
          <div class="col-md-12">
             <div class="container-inner">
-               <ul>
-                  <li class="home">
-                     <a href="{{route('home')}}">Trang chủ</a>
-                     <span><i class="fa fa-angle-right"></i></span>
-                  </li>
-                  <li class="category3"><span>Lấy lại mật khẩu</span></li>
-               </ul>
+                <ul class="breadcrumb" style="margin-left: 104px;margin-top: 50px;">
+                    <li><a href="{{route('home')}}" style="font-weight: 500; color: black">Trang chủ</a></li>
+                    <li>Lấy lại mật khẩu</li>
+                </ul>
             </div>
          </div>
       </div>
@@ -27,7 +24,7 @@
                         <form method="POST">
                             @csrf
                             <div class="form-group row">
-                                <label for="email" class="col-md-4 col-form-label text-md-right">Mật khẩu mới</label>
+                                <label for="email" class="col-md-2 col-form-label ">Mật khẩu mới</label>
 
                                 <div class="col-md-6">
                                     <input id="password" type="password" class="form-control" name="password" autofocus>
@@ -40,7 +37,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="password_confirm" class="col-md-4 col-form-label text-md-right">Xác nhận mật khẩu</label>
+                                <label for="password_confirm" class="col-md-2 col-form-label ">Xác nhận mật khẩu</label>
 
                                 <div class="col-md-6">
                                     <input id="password-confirm" type="password" class="form-control" name="password_confirm" >
@@ -54,8 +51,8 @@
 
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ __('Reset Password') }}
+                                    <button type="submit" class="btn btn-primary" style="margin-left: 162px;margin-bottom: 40px;">
+                                        {{ __('Cập nhật') }}
                                     </button>
                                 </div>
                             </div>

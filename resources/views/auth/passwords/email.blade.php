@@ -6,13 +6,10 @@
       <div class="row">
          <div class="col-md-12">
             <div class="container-inner">
-               <ul>
-                  <li class="home">
-                     <a href="{{route('home')}}">Trang chủ</a>
-                     <span><i class="fa fa-angle-right"></i></span>
-                  </li>
-                  <li class="category3"><span>Lấy lại mật khẩu</span></li>
-               </ul>
+                <ul class="breadcrumb" style="margin-left: 104px;margin-top: 50px;">
+                    <li><a href="{{route('home')}}" style="font-weight: 500; color: black">Trang chủ</a></li>
+                    <li>Lấy lại mật khẩu</li>
+                </ul>
             </div>
          </div>
       </div>

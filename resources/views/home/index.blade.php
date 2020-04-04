@@ -1,6 +1,22 @@
 @extends('layouts.app')
 @section('content')
  <!-- HOME SLIDER -->
+ <style>
+    .timer .timerBlock {
+        background: #F57D65 !important;
+        text-transform: uppercase;
+        font-weight: 400;
+        font-size: 20px;
+        color: #fff;
+        width: 60px;
+        display: block;
+        margin-bottom: 30px;
+     }
+    .timer .timerChild{
+        height: 30px;
+        padding-top: 5px;
+     }
+ </style>
 @include('components.slider')
 <!-- HOME SLIDER END -->
 	<!-- features-area start -->
@@ -35,21 +51,27 @@
                         Quick View</a>
 
                   </div>
+                  <?php
+                        $averageRating = 0;
+                        if ($getSingleHotAndActiveProduct->pro_total_rating > 0) {
+                            $averageRating = $getSingleHotAndActiveProduct->pro_total_number/$getSingleHotAndActiveProduct->pro_total_rating;
+                        }
+
+                    ?>
                   <div class="product-content">
                     <div class="pro-rating">
-                      <a href="#"><i class="fa fa-star"></i></a>
-                      <a href="#"><i class="fa fa-star"></i></a>
-                      <a href="#"><i class="fa fa-star"></i></a>
-                      <a href="#"><i class="fa fa-star-o"></i></a>
+                        @for ($i = 1; $i <= 5; $i++)
+                        <a href="#"><i class="fa {{$i<=$averageRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                        @endfor
                     </div>
                     <h5><a href="#" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                         {{mb_strtolower($getSingleHotAndActiveProduct->pro_name)}}</a></h5>
                     @if($getSingleHotAndActiveProduct->pro_sale > 0)
-                      <span class="old-price">{{$getSingleHotAndActiveProduct->pro_price}} đ</span>
+                      <span class="old-price">{{number_format($getSingleHotAndActiveProduct->pro_price,0,'','.')}} đ</span>
                       <span class="pro-price">{{get_cal_sale($getSingleHotAndActiveProduct->pro_price,
                       $getSingleHotAndActiveProduct->pro_sale)}} đ</span>
                     @else
-                      <span class="pro-price">{{$getSingleHotAndActiveProduct->pro_price}} đ</span>
+                      <span class="pro-price">{{number_format($getSingleHotAndActiveProduct->pro_price,0,'','.')}} đ</span>
                     @endif
                   </div>
                 </div>
@@ -62,6 +84,77 @@
     </div>
   </div>
   <!-- features-area end -->
+<!-- just watch product start -->
+<div class="features-area" id="renderViewProduct">
+
+</div>
+    <!-- just watch product end -->
+
+ <!-- sản phẩm đã mua start -->
+ @if (!empty($listProduct))
+ <div class="features-area">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="section-heading">
+            <h3>Sản phẩm cùng danh mục bạn đã mua</h3>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="features-curosel">
+          <!-- single-features start -->
+            @foreach($listProduct as $singleProduct)
+              <div class="col-md-3">
+                <div class="single-features">
+                  @if($singleProduct->pro_sale > 0)
+                    <span class="sale-text">-{{$singleProduct->pro_sale}}%</span>
+                  @endif
+                  <div class="product-img">
+                  <a href="{{route('get.detail.product',[$singleProduct->pro_slug,
+                  $singleProduct->id])}}">
+                      <img style="width: 263px; height: 346px" class="first-img"
+                      src="{{pare_url_file($singleProduct->pro_avatar)}}" alt="" />
+                      <img style="width: 263px; height: 346px" class="second-img"
+                       src="{{pare_url_file($singleProduct->pro_img)}}" alt="" />
+                    </a>
+                    <a class="modal-view" href="{{route('get.quickView.product',$singleProduct->id)}}">
+                        Quick View</a>
+
+                  </div>
+                  <?php
+                        $averageRating = 0;
+                        if ($singleProduct->pro_total_rating > 0) {
+                            $averageRating = $singleProduct->pro_total_number/$singleProduct->pro_total_rating;
+                        }
+
+                    ?>
+                  <div class="product-content">
+                    <div class="pro-rating">
+                        @for ($i = 1; $i <= 5; $i++)
+                        <a href="#"><i class="fa {{$i<=$averageRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                        @endfor
+                    </div>
+                    <h5><a href="#" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        {{mb_strtolower($singleProduct->pro_name)}}</a></h5>
+                    @if($singleProduct->pro_sale > 0)
+                      <span class="old-price">{{number_format($singleProduct->pro_price,0,'','.')}} đ</span>
+                      <span class="pro-price">{{get_cal_sale($singleProduct->pro_price,
+                      $singleProduct->pro_sale)}} đ</span>
+                    @else
+                      <span class="pro-price">{{number_format($singleProduct->pro_price,0,'','.')}} đ</span>
+                    @endif
+                  </div>
+                </div>
+              </div>
+            @endforeach
+          <!-- sản phẩm đã mua end -->
+        </div>
+      </div>
+    </div>
+  </div>
+ @endif
+  <!-- features-area end -->
   <!-- banner-area start -->
   @include('components.banner')
   <!-- banner-area end -->
@@ -72,102 +165,64 @@
         <div class="sale-curosel1">
           <div class="col-lg-4 col-md-4 col-sm-12">
             <div class="sale-title">
-              <h3>Best selling</h3>
+              <h3>Sản phẩm bán chạy</h3>
             </div>
             <div class="sale-curosel">
-              <!-- product start -->
-              <div class="single-features">
-                <span class="sale-text">Sale</span>
-                <div class="product-img">
-                  <a href="#">
-                    <img class="first-img" src="img/product/3.jpg" alt="" />
-                    <img class="second-img" src="img/product/4.jpg" alt="" />
-                  </a>
-                  <a class="modal-view" href="#" data-toggle="modal" data-target="#productModal">Quick View</a>
-                  <div class="action-buttons">
-                    <a class="add-to-cart" href="#"><i class="fa fa-shopping-cart"></i> <span>Add to cart</span></a>
-                    <a class="favourite" href="#"><i class="fa fa-heart-o"></i></a>
-                    <a class="compare" href="#"><i class="fa fa-toggle-off"></i></a>
-                  </div>
-                </div>
-                <div class="timer">
-                  <div data-countdown="2016/05/01"></div>
-                </div>
-                <div class="product-content">
-                  <div class="pro-rating">
-                    <a href="#"><i class="fa fa-star"></i></a>
-                    <a href="#"><i class="fa fa-star"></i></a>
-                    <a href="#"><i class="fa fa-star"></i></a>
-                    <a href="#"><i class="fa fa-star-o"></i></a>
-                  </div>
-                  <h5><a href="#">Etiam molestie</a></h5>
-                  <span class="old-price">£230.00</span>
-                  <span class="pro-price">£220.00</span>
-                </div>
-              </div>
+              @if ($productBestSells)
+                  @foreach ($productBestSells as $productBestSell)
+                     <!-- product start -->
+                    <div class="single-features">
+                        @if($productBestSell->pro_sale > 0)
+                            <span class="sale-text">-{{$productBestSell->pro_sale}}%</span>
+                        @endif
+                        <div class="product-img">
+                        <a href="{{route('get.detail.product',[$productBestSell->pro_slug,
+                            $productBestSell->id])}}">
+                            <img class="first-img" src="{{pare_url_file($productBestSell->pro_avatar)}}" style="width: 360px; height: 473px" alt="" />
+                            <img class="second-img" src="{{pare_url_file($productBestSell->pro_img)}}" style="width: 360px; height: 473px" alt="" />
+                        </a>
+                        <a class="modal-view" href="{{route('get.quickView.product',$productBestSell->id)}}" >Quick View</a>
+                        </div>
+                        <?php
+                        $averageSaleRating = 0;
+                        if ($productBestSell->pro_total_rating > 0) {
+                            $averageSaleRating = $productBestSell->pro_total_number/$productBestSell->pro_total_rating;
+                            }
+
+                        ?>
+                        <div class="product-content">
+                            <div class="pro-rating">
+                                @for ($i = 1; $i <= 5; $i++)
+                                <a href="#"><i class="fa {{$i<=$averageSaleRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                                @endfor
+                            </div>
+                        <h5><a href="#">{{$productBestSell->pro_name}}</a></h5>
+                        @if($productBestSell->pro_sale > 0)
+                        <span class="old-price">{{number_format($productBestSell->pro_price,0,'','.')}} đ</span>
+                        <span class="pro-price">{{get_cal_sale($productBestSell->pro_price,
+                        $productBestSell->pro_sale)}} đ</span>
+                         @else
+                         <span class="pro-price">{{number_format($productBestSell->pro_price,0,'','.')}} đ</span>
+                         @endif
+                        </div>
+                    </div>
               <!-- product end -->
-              <!-- product start -->
-              <div class="single-features">
-                <span class="sale-text">Sale</span>
-                <div class="product-img">
-                  <a href="#">
-                    <img class="first-img" src="img/product/5.jpg" alt="" />
-                    <img class="second-img" src="img/product/6.jpg" alt="" />
-                  </a>
-                  <a class="modal-view" href="#" data-toggle="modal" data-target="#productModal">Quick View</a>
-                  <div class="action-buttons">
-                    <a class="add-to-cart" href="#"><i class="fa fa-shopping-cart"></i> <span>Add to cart</span></a>
-                    <a class="favourite" href="#"><i class="fa fa-heart-o"></i></a>
-                    <a class="compare" href="#"><i class="fa fa-toggle-off"></i></a>
-                  </div>
+                  @endforeach
+              @endif
+            </div>
+            <div id="timer" class="timer">
+                <div class="timerBlock">
+                    <div id="days" class="timerChild""></div>
                 </div>
-                <div class="timer">
-                  <div data-countdown="2016/04/01"></div>
+                <div class="timerBlock">
+                    <div id="hours" class="timerChild""></div>
                 </div>
-                <div class="product-content">
-                  <div class="pro-rating">
-                    <a href="#"><i class="fa fa-star"></i></a>
-                    <a href="#"><i class="fa fa-star"></i></a>
-                    <a href="#"><i class="fa fa-star"></i></a>
-                    <a href="#"><i class="fa fa-star-o"></i></a>
-                  </div>
-                  <h5><a href="#">Aenean eu tristique</a></h5>
-                  <span class="old-price">£80.00</span>
-                  <span class="pro-price">£70.00</span>
+                <div class="timerBlock">
+                    <div id="minutes" class="timerChild""></div>
                 </div>
-              </div>
-              <!-- product end -->
-              <!-- product start -->
-              <div class="single-features">
-                <span class="sale-text">Sale</span>
-                <div class="product-img">
-                  <a href="#">
-                    <img class="first-img" src="img/product/10.jpg" alt="" />
-                    <img class="second-img" src="img/product/11.jpg" alt="" />
-                  </a>
-                  <a class="modal-view" href="#" data-toggle="modal" data-target="#productModal">Quick View</a>
-                  <div class="action-buttons">
-                    <a class="add-to-cart" href="#"><i class="fa fa-shopping-cart"></i> <span>Add to cart</span></a>
-                    <a class="favourite" href="#"><i class="fa fa-heart-o"></i></a>
-                    <a class="compare" href="#"><i class="fa fa-toggle-off"></i></a>
-                  </div>
+                <div class="timerBlock">
+                    <div id="seconds" class="timerChild""></div>
                 </div>
-                <div class="timer">
-                  <div data-countdown="2016/03/01"></div>
-                </div>
-                <div class="product-content">
-                  <div class="pro-rating">
-                    <a href="#"><i class="fa fa-star"></i></a>
-                    <a href="#"><i class="fa fa-star"></i></a>
-                    <a href="#"><i class="fa fa-star"></i></a>
-                    <a href="#"><i class="fa fa-star-o"></i></a>
-                  </div>
-                  <h5><a href="#">Phasellus vel hendrerit</a></h5>
-                  <span class="old-price">£100.00</span>
-                  <span class="pro-price">£80.00</span>
-                </div>
-              </div>
-              <!-- product end -->
             </div>
           </div>
         </div>
@@ -643,3 +698,80 @@
     })
   </script>
 @stop
+
+{{-- hàm thời gian giảm dần ở sản phẩm bán chạy --}}
+
+@section('timer')
+   <script>
+     function makeTimer() {
+
+        //		var endTime = new Date("29 April 2018 9:56:00 GMT+01:00");
+        //ngày kết thúc
+        var endTime = new Date("15 April 2020 00:00:00  UTC+7:00");
+
+        endTime = (Date.parse(endTime) / 1000);
+       //Phương thức date parse() trong JavaScript Phân tích một biểu diễn chuỗi
+       // của một ngày và thời gian và trả về biểu diễn mili giây
+       //nội bộ của ngày đó từ nửa đêm ngày 1/1/1970 UTC.
+        var now = new Date();
+        now = (Date.parse(now) / 1000);
+
+        var timeLeft = endTime - now;
+
+        var days = Math.floor(timeLeft / 86400);
+        //86400 giây/ngày
+        console.log(days);
+        var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
+        //1 hour có 3600 giây
+        var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600 )) / 60);
+        var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
+        // Phương thức Math. floor() sẽ làm tròn dưới số được cung cấp
+
+        //if (hours < "10") { hours = "0" + hours; }
+       // if (minutes < "10") { minutes = "0" + minutes; }
+      //  if (seconds < "1") { seconds = "0" + seconds; }
+
+        $("#days").html(days + "<p>Days</p>");
+        $("#hours").html(hours + "<p>Hours</p>");
+        $("#minutes").html(minutes + "<p>Min</p>");
+        $("#seconds").html(seconds + "<p>Sec</p>");
+
+        }
+
+        setInterval(function() { makeTimer(); }, 1000);
+        // thực hiện một đoạn mã Javascript tại một thời điểm nào đó trong tương lai.
+        //cử 1000 mili giây(1s) là thực hiện hàm makeTimer một lần
+    </script>
+@endsection
+@section('script')
+    <script>
+
+        $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+        });
+        // //token thêm ở header dưới dạng meta
+        //hàm scroll để show ra sản phẩm vừa xem
+        $(document).ready(function(){
+            let urlRenderViewProduct = "{{route('render.view.product')}}";
+            $(window).scroll(function(){
+                if ($(window).scrollTop() > 1200) {
+                    //lấy danh sách id sản phẩm
+                    products = sessionStorage.getItem('products');
+                    products = $.parseJSON(products);
+                    //hàm ajax xử lý dử liệu
+                    $.ajax({
+                        url : urlRenderViewProduct,
+                        type: "POST",
+                        data : {
+                            listId : products
+                        }
+                    }).done(function(result){
+                        $('#renderViewProduct').html('').append(result);
+                    })
+                }
+            })
+        })
+    </script>
+@endsection

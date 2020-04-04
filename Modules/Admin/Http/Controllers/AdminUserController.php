@@ -6,9 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use App\User;
-class AdminUserController extends Controller
+class AdminUserController extends AdminHeaderController
 {
-    
+
+    public function __construct()
+	{
+		parent::__construct();
+	}
+
     public function index()
     {
     	$users = User::whereRaw(1);

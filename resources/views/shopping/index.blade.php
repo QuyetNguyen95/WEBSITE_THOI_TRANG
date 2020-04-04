@@ -53,12 +53,11 @@
                                 <?php $stt = 1; ?>
                                 @if ($products)
                                     @foreach ($products as $product )
-                                    <form action="{{route('quantity.products.shopping',
-                                    [$product->rowId,$product->id])}}" method="POST" >
+                                    <form action="" method="POST" >
                                         @csrf
                                         <tr>
                                             <td>{{$stt}}</td>
-                                        <td class="product-name" style="text-align: left;"><a href="#">{{$product->name}}</a>
+                                        <td class="product-name" style="text-align: left;"><a href="{{route('get.detail.product',[$product->options->slug,$product->id])}}">{{$product->name}}</a>
                                             <ul style="margin-left: 10px;">
                                                 <li>Color: {{$product->options->color}}</li>
                                                 <li>Size: {{$product->options->size}}</li>
@@ -68,15 +67,16 @@
                                             src="{{pare_url_file($product->options->avatar)}}" alt="" /></a></td>
                                         <td class="product-price"><span class="amount">
                                             {{number_format($product->options->price_old,0,'','.')}} đ</span></td>
-                                        <td class="product-quantity"><input class="qty" type="number" value="{{$product->qty}}" min="1" name="quantity" />
+                                        <td class="product-quantity"><input class="qty{{$product->id}}" type="number" value="{{$product->qty}}" min="1" name="quantity" />
 
                                         </td>
                                         <td class="product-price"><span class="amount">{{$product->options->sale}} %</span></td>
-                                        <td class="product-subtotal">{{number_format($product->price*$product->qty,0,'','.')}} đ</td>
+                                        <td class="product-subtotal"><span id="price{{$product->id}}" data-price="{{$product->price}}" class="loopTable">{{$product->price*$product->qty}}</span> đ</td>
                                         <td class="product-remove">
-                                            <button type="submit" class="btn btn-xs" style=" margin-left: 6px;background-color: #919191;
-                                            border-color: #919191; color: white;"><span>Update</span></button>
-                                            <a href="{{route('delete.products.shopping',$product->rowId)}}">
+                                            <a href="{{route('quantity.products.shopping')}}" id="updateCart{{$product->id}}" data-rowId="{{$product->rowId}}" data-number="{{$product->options->number}}">
+                                                <i class="fa fa-refresh"></i>
+                                            </a>
+                                            <a href="{{route('delete.products.shopping')}}" class="deleteCart" data-rowId="{{$product->rowId}}">
                                                 <i class="fa fa-times"></i>
                                             </a>
                                         </td>
@@ -104,7 +104,7 @@
                                 <tbody>
                                     <tr class="cart-subtotal">
                                         <th>giá tạm tính</th>
-                                        <td><span class="amount">{{Cart::subtotal(0,'.','.')}} đ</span></td>
+                                        <td><span class="amount1">{{Cart::subtotal(0,'.','.')}}</span> đ</td>
                                     </tr>
                                     <tr class="shipping">
                                         <th>Phí vận chuyển</th>
@@ -115,7 +115,7 @@
                                     <tr class="order-total">
                                         <th>Thành tiền</th>
                                         <td>
-                                            <strong><span class="amount">{{Cart::subtotal(0,'.','.')}} đ</span></strong>
+                                            <strong><span class="amount" id="amount">{{Cart::subtotal(0,'.','.')}} đ</span></strong>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -145,4 +145,97 @@
 @endif
 <!-- cart-main-area end -->
 @stop
+@section('update')
+    <script>
+         $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+            });
+            // //token thêm ở header dưới dạng meta
+
+
+            $(document).ready(function(){
+                //HÀM UPDATE SỐ LƯỢNG SẢN PHẨM'
+                @foreach($products as $product)
+                    $('#updateCart{{$product->id}}').click(function(e){
+                        e.preventDefault();
+                        //lấy số lượng sản phẩm theo id của sản phẩm
+                        let qty = $('.qty{{$product->id}}').val();//int
+                        //lấy rowId của sản phẩm
+                        let rowId = $(this).attr('data-rowId');
+                        //lấy url của từng sản phẩm
+                        let url = $(this).attr('href');
+                         //lấy giá của sản phẩm
+                        let price = $('#price{{$product->id}}').attr('data-price');
+                        let pro_number = $(this).attr('data-number');//string
+                        console.log(pro_number,qty);
+                        if(qty > parseInt(pro_number))
+                        {
+                            location.reload();
+                            alert('Sản phẩm đã hết hàng');
+                        }else if(qty > 5)
+                        {
+                            location.reload();
+                            alert('Bạn chỉ được mua tối đã 5 sản phẩm');
+                        }
+                        else{
+                             // tính lại giá của từng sản phẩm
+                             $('#price{{$product->id}}').text(price*qty);
+
+                             //dùng vòng lặp each tính lại giá của tổng các sản phẩm
+                            let subtotal = 0;
+                            $('.loopTable').each(function (index, value) {
+                                subtotal += parseInt($(this).text());
+                            });
+                            //giá tạm tính
+                            $('.amount1').text($.number(subtotal,0,'','.'));
+
+                            //thành tiền
+                            $('#amount').text($.number(subtotal,0,'','.') + " Đ");
+                            //hàm $.number() là thư viện format number trong jquery (jquery.number.js)
+
+                             //hàm ajax xử lý dữ liệu
+                                $.ajax({
+                                url : url ,
+                                type: "POST",
+                                data: {
+                                    qty : qty,
+                                    rowId : rowId
+                                }
+                            }).done(function(result){
+                                if(result.code == 1)
+                                {
+                                    console.log(result);
+                                }
+                            })
+                        }
+                    })
+                @endforeach
+
+                //HÀM XÓA SẢN PHẨM TRONG GIỎ HÀNG
+                $('.deleteCart').click(function(e){
+                    e.preventDefault();
+                    //lấy đường dẩn url
+                    let url = $(this).attr('href');
+                    //lấy rowId của sản phẩm
+                    let rowId = $(this).attr('data-rowId');
+                   //hàm ajax xử lý dữ liệu
+                   $.ajax({
+                        url : url ,
+                        type: "POST",
+                        data: {
+                            rowId : rowId
+                        }
+                    }).done(function(result){
+                        if(result.code == 1)
+                        {
+                            location.reload();
+                            console.log(result);
+                        }
+                    })
+                })
+            })
+    </script>
+@endsection
 

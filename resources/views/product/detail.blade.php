@@ -15,6 +15,7 @@
 			box-sizing: border-box;
 			font-size: 12px;
 			border-radius: 2px;
+            display: none;
 		}
 		.list_text:after{
 			right: 100%;
@@ -30,6 +31,13 @@
 			border-width: 6px;
 			margin-top: -6px;
 		}
+		.list_star .rating_active, .pro-rating .active
+		{
+			color: #ff9705;
+		}
+        .rating .active{
+        color:#ff9705;
+    }
 	</style>
     <!-- breadcrumb-area start -->
 	<div class="breadcrumb-area product-breadcrumb">
@@ -46,7 +54,7 @@
 	</div>
 	<!-- breadcrumb-area end -->
 	<!-- product-main-area start -->
-	<div class="product-main-area">
+	<div class="product-main-area" data-id="{{$getDetailProduct->id}}">
 		<div class="container">
 			<div class="row">
 				<!-- product-page-photo start -->
@@ -90,13 +98,18 @@
 					<div class="product-page-content">
 						<div class="pro-page-title">
 							<h1 style="width: max-content;">{{$getDetailProduct->pro_name}}</h1>
-						</div>
-						<div class="product-page-rating">
-							<a href="#"><i class="fa fa-star"></i></a>
-							<a href="#"><i class="fa fa-star"></i></a>
-							<a href="#"><i class="fa fa-star"></i></a>
-							<a href="#"><i class="fa fa-star"></i></a>
-							<a href="#"><i class="fa fa-star"></i></a>
+                        </div>
+                        <?php
+                        $averageRating = 0;
+                        if ($getDetailProduct->pro_total_rating > 0) {
+                            $averageRating = $getDetailProduct->pro_total_number/$getDetailProduct->pro_total_rating;
+                        }
+
+                        ?>
+						<div class="rating" style="color: #999">
+                            @for ($i = 1; $i <= 5; $i++)
+                                <i class="fa fa-star {{$i <= $averageRating ? 'active' : ''}}"></i>
+                            @endfor
 						</div>
 						<div class="stock-status">
                             @if ($getDetailProduct->pro_number > 0)
@@ -171,17 +184,17 @@
 						<div>
 						  <!-- Nav tabs -->
 						  <ul class="nav nav-tabs" role="tablist">
-							<li role="presentation" class="active"><a href="#home" aria-controls="home"
+							<li role="presentation" ><a href="#home" aria-controls="home"
 								role="tab" data-toggle="tab" style="border-radius: 10px;">Mô tả</a></li>
 							<li role="presentation"><a href="#information" aria-controls="information"
 								role="tab" data-toggle="tab" style="border-radius: 10px;">Thông tin bổ sung</a></li>
-							<li role="presentation"><a href="#profile" aria-controls="profile"
+							<li role="presentation" class="active"><a href="#profile" aria-controls="profile"
 								role="tab" data-toggle="tab" style="border-radius: 10px;">Đánh giá</a></li>
 						  </ul>
 
 						  <!-- Tab panes -->
 						  <div class="tab-content">
-							<div role="tabpanel" class="tab-pane active" id="home">
+							<div role="tabpanel" class="tab-pane " id="home">
 								<div class="product-page-tab-content">
 									<p>{!!$getDetailProduct->pro_content!!}</p>
 								</div>
@@ -191,7 +204,7 @@
 									{!!$getDetailProduct->pro_addInfo!!}
 								</div>
 							</div>
-							<div role="tabpanel" class="tab-pane" id="profile">
+							<div role="tabpanel" class="tab-pane active" id="profile">
 								<div class="product-page-comments">
 									<h2>Xin hãy để lại một bình luận cho sản phẩm</h2>
 									<ul>
@@ -219,55 +232,142 @@
 										<div class="component_rating">
 											<h3>Đánh giá sản phẩm</h3>
 											<div class="component_rating_content" style="display: flex; align-items: center;border-radius: 5px;
-											border: 1px solid #dedede;">
+											    border: 1px solid #dedede;">
 												<div class="rating_item" style="width:20%; position: relative;">
-													<span class="fa fa-star" style="font-size: 85px;display: block;color: #ff9705;margin: 0 auto;text-align: center;">
+													<span class="fa fa-star" style="font-size: 100px;display: block;color: #ff9705;margin: 0 auto;text-align: center;">
 													</span><b style="position: absolute;
-													top: 50%;left: 50%;transform: translateX(-50%) translateY(-50%);color: white;font-size: 17px;">2.89</b>
+													top: 50%;left: 50%;transform: translateX(-50%) translateY(-50%);color: white;font-size: 17px;">{{$averageRating}}</b>
+                                                </div>
+                                                @if ($arrayRating)
+                                                <div class="list_rating" style="width:60%;padding: 20px">
+                                                    @foreach ($arrayRating as $key => $itemRating)
+                                                    <?php
+                                                        $ratingPercent = round($itemRating['total']/$getDetailProduct->pro_total_rating*100);
+                                                    ?>
+													<div class="item_rating" style="display: flex; margin: 0 20px; align-items: center;">
+															<div style="width: 10%;font-size: 16px;">
+																{{$key}}    <span class="fa fa-star"></span>
+															</div>
+															<div style="width: 70%; padding-right: 10px;">
+																<span style="width: 100%;height: 6px; display: block; border: 1px solid #dedede;border-radius: 5px;">
+																	<b style="width: {{$ratingPercent}}%;background-color: #f25800;display: block;height: 100%;border-radius: 5px;"></b>
+																</span>
+															</div>
+															<div style="width: 20%">
+                                                                <a href="" style="color: #777; font-size: 16px;">{{$itemRating['total']}} đánh giá</a>
+                                                                <span>{{$ratingPercent}} %</span>
+															</div>
+                                                    </div>
+                                                    @endforeach
 												</div>
-												<div class="list_rating" style="width:70%;padding: 20px">
-													@for ($i = 1; $i <=5; $i++)
-													<div class="item_rating" style="display: flex; width: 405px; margin: 0 20px; align-items: center;">
-															<div style="width: 10%">
+                                                @else
+                                                <div class="list_rating" style="width:60%;padding: 20px">
+                                                   @for ($i = 1; $i < 5; $i++)
+													<div class="item_rating" style="display: flex; margin: 0 20px; align-items: center;">
+															<div style="width: 10%;font-size: 16px;">
 																{{$i}}    <span class="fa fa-star"></span>
 															</div>
 															<div style="width: 70%; padding-right: 10px;">
 																<span style="width: 100%;height: 6px; display: block; border: 1px solid #dedede;border-radius: 5px;">
-																	<b style="width: 33%;background-color: #f25800;display: block;height: 100%;border-radius: 5px;"></b>
+																	<b style="width: 0%;background-color: #f25800;display: block;height: 100%;border-radius: 5px;"></b>
 																</span>
 															</div>
 															<div style="width: 20%">
-																<a href="" style="color: #777; font-size: 13px;">290 đánh giá</a>
+                                                                <a href="" style="color: #777; font-size: 16px;">0 đánh giá</a>
+                                                                <span>0 %</span>
 															</div>
-													</div>
-													@endfor
+                                                    </div>
+                                                    @endfor
 												</div>
-												<div style="width: 22%;margin-left: 0px;">
+                                                @endif
+												<div style="width: 20%;margin-left: 0px;">
 													<a href="#" class="js_rating_action" style="color: white;
-													width: 200px;background: #288ad6;padding: 10px;border-radius: 5px;font-size: 13px;">Gửi đánh giá</a>
+													width: 200px;background: #288ad6;padding: 10px;border-radius: 5px;font-size: 16px;">Gửi đánh giá của bạn</a>
 												</div>
 
 											</div>
-											<?php
-												$listRatingText = [
-													1 => "Không thích",
-													2 => "Tạm được",
-													3 => "Bình thường",
-													4 => "Rất tốt",
-													5 => "Tuyệt vời quá"
-												];
-											?>
-											<div style="display: flex; margin-top: 15px">
-												<p style="margin-bottom: 0px">Chọn đánh giá của bạn </p>
-												<span style="margin: 0 15px;" class="list_star">
-													@for ($i = 1; $i <=5; $i++)
-														<i class="fa fa-star" style="padding: 0 3px;"></i>
-													@endfor
-												</span>
-												<span class="list_text">Tốt</span>
-											</div>
+											<div class="form_rating" style="display: none">
+                                                <div style="display: flex; margin-top: 15px">
+                                                    <p style="margin-bottom: 0px; font-size: 16px;">Chọn đánh giá của bạn </p>
+                                                    <span style="margin: 0 15px; font-size: 16px" class="list_star">
+                                                        @for ($i = 1; $i <=5; $i++)
+                                                            <i class="fa fa-star" data-key="{{$i}}" style="padding: 0 3px;"></i>
+                                                        @endfor
+                                                    </span>
+                                                    <span class="list_text"></span>
+                                                    <input type="hidden" class="number_rating" value="">
+                                                </div>
+                                                <div>
+                                                    <textarea name="" id="ra_content" cols="30" rows="10" class="form-control"></textarea>
+                                                </div>
+                                                <div>
+                                                    <a href="{{route('post.rating.product',$getDetailProduct->id)}}" class="js_rating_product"
+                                                    style="width: 150px; background: #288ad6;padding:
+                                                    5px 10px; color: white;border-radius: 5px; font-size: 16px;">Gửi đánh giá</a>
+                                                </div>
+                                            </div>
+                                            <div class="component_list_rating" style="margin-top: 20px;">
+                                                <div class="comments-list" >
+                                                    <ul><?php $stt = 1;?>
+                                                        @if (isset($listRating))
+                                                            @foreach ($listRating as $singleRating)
+                                                            <input type="hidden" value="{{$stt}}" class="comment_number">
+                                                            <?php $stt++; ?>
+                                                            <li>
+                                                                <div class="comments-details">
+                                                                    <div class="comments-list-img">
+                                                                        <img src="{{asset('img/blog/comments/2.jpg')}}" alt="" />
+                                                                    </div>
+                                                                    <div class="comments-content-wrap" style="font-size: 14px;">
+                                                                        <div style="margin-bottom: 10px">
+                                                                            <b><a href="#">{{$singleRating->user->name}}</a></b>
+                                                                            <span style="color: #2ba832;"><i class="fa fa-check-circle-o"></i><span> Đã mua hàng tại website</span></span>
+                                                                             </div>
+                                                                        <div style="margin-bottom: 10px" class="rating">
+                                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                                <i class="fa fa-star {{$i<=$singleRating->ra_number ? 'active' : ''}}"></i>
+                                                                            @endfor
+                                                                            <span>{{$singleRating->ra_content}}</span>
+                                                                        </div>
+                                                                        <div>
+                                                                            <span class="post-time"><i class="fa fa-clock-o"></i> {{date("jS F, Y H:i:s", strtotime($singleRating->updated_at))}}</span>
+                                                                            <a href="#" class="reply{{$singleRating->id}}">Thảo luận</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="threaded-comments{{$singleRating->id}}" style="display: none">
+                                                                    <div class="form-group" style="display: flex">
+                                                                        <textarea cols="20" rows="1" class="form-control" style="height: 42px; width: 87%; margin-left: 62px" id="re_comment{{$singleRating->id}}"></textarea>
+                                                                        <a href="{{route('post.reply.comment.product',$singleRating->id)}}" class="postReply{{$singleRating->id}}" style="padding: 9px 10px;
+                                                                            border: 1px solid #288ad6;background: #fff;color: #288ad6; font-size: 13px;
+                                                                            border-radius: 4px;height: 42px;width: 44px;margin-top: 20px; margin-left: 36px;">Gửi</a>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            @if (isset($singleRating->replys))
+                                                                @foreach ($singleRating->replys as $item)
+                                                                <li class="threaded-comments">
+                                                                    <div class="comments-details">
+                                                                        <div class="comments-list-img">
+                                                                            <img src="{{asset('img/blog/comments/1.jpg')}}" alt="" />
+                                                                        </div>
+                                                                        <div class="comments-content-wrap" style="font-size: 14px">
+                                                                            <span style="font-weight: 600">
+                                                                                {{$item->user->name}}
+                                                                            </span>
+                                                                            <p>{{$item->re_comment}}</p>
+                                                                            <i class="fa fa-thumbs-o-up"></i> <span>Thích</span> <span>{{date("jS F, Y H:i:s", strtotime($item->updated_at))}}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                                @endforeach
+                                                            @endif
+                                                            @endforeach
+                                                        @endif
+                                                    </ul>
+                                                </div>
+                                            </div>
 										</div>
-
 									</div>
 								</div>
 							</div>
@@ -450,4 +550,180 @@
     })
   </script>
 @stop
+@section('script')
+	<script>
+        //PHẦN ĐÁNH GIÁ SẢN PHẨM
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+            });
+            // //token thêm ở header dưới dạng meta
+
+            //hàm chọn số sao đánh giá bàng mouseover
+            $(function(){
+                //lấy danh sách sao ra
+                //   listStar là một object jQuery
+                //  { 0: i.fa.fa-star
+                //   1: i.fa.fa-star
+                //   2: i.fa.fa-star
+                //   3: i.fa.fa-star
+                //   4: i.fa.fa-star}
+                let listStar = $('.list_star .fa');
+                //list danh sách các list_text
+
+                let listRatingText = {
+                    1 : "Không thích",
+                    2 : "Tạm được",
+                    3 : "Bình thường",
+                    4 : "Rất tốt",
+                    5 : "Tuyệt vời quá"
+                }
+
+                listStar.mouseover(function(){
+                    //lấy số sao từ data-key
+                    let number = $(this).attr('data-key');
+                    //set value cho number_rating để gửi dang database
+
+                    $('.number_rating').val(number);
+                    //vòng lặp chọn sao
+                    $.each(listStar,function(key,value){
+                        if(key+ 1 <= number){
+                            $(this).addClass('rating_active');
+                        }
+                        else{
+                            $(this).removeClass('rating_active');
+                        }
+                    })
+
+                    //show listRatingText ra
+                    $('.list_text').text(listRatingText[number]).show();
+                    //show() để show ra khối có display = none
+                })
+            })
+
+            //hàm click vào thì ần hiện form đánh giá
+
+           $(function(){
+            $('.js_rating_action').click(function(e){
+               e.preventDefault();// dừng sự kiện không để load lại trang
+
+                $('.form_rating').slideToggle("slow");
+            })
+           })
+
+
+           //hàm click vào ẩn hiện phần tra lời đánh giá
+
+           $(function(){
+               //hàm click vào ẩn hiện phần tra lời đánh giá
+            @foreach ($listRating as $singleRating)
+               $('.reply{{$singleRating->id}}').click(function(e){
+                   e.preventDefault();
+                    $('#threaded-comments{{$singleRating->id}}').slideToggle('slow');
+                    let url = $(this).attr('href');
+                    $('#reply-comments-details{{$singleRating->id}}').html('');
+                   //hàm ajax xử lý gửi dử liệu, show comment
+                    $.ajax({
+                        url : url
+                    }).done(function(result){
+                            $('#reply-comments-details{{$singleRating->id}}').append(result);
+                    })
+
+                })
+               @endforeach
+           })
+
+
+            //hàm gửi trả lời comment
+            $(function(){
+                @foreach ($listRating as $singleRating)
+                $('.postReply{{$singleRating->id}}').click(function(e){
+                   e.preventDefault();
+                   //lấy nội dung
+                   let re_comment = $('#re_comment{{$singleRating->id}}').val();
+
+                   //lấy url
+                   let url = $(this).attr('href');
+                   //hàm ajax xử lý gửi dử liệu
+                  $.ajax({
+                      url : url,
+                      type : "POST",
+                      data: {
+                          re_comment : re_comment
+                      }
+                  }).done(function(result){
+                    if(result.code == 1){
+                            //alert('Trả lời bình luận thành công');
+                            location.reload();
+                        }
+                        else{
+                            alert('Xin hãy đăng nhập trước khi tham gia thảo luận');
+                            window.location.href="<?php echo url('/');?>/dang-nhap";
+                        }
+                  })
+                })
+                @endforeach
+            })
+           //hàm gửi đánh giá bằng ajax
+           $(function(){
+                $('.js_rating_product').click(function(e){
+                    e.preventDefault();
+                    let ra_number = $('.number_rating').val();//get value number
+                    let ra_content = $('#ra_content').val();//get value content
+                    let url = $(this).attr('href');//get url
+                    //hàm xử lý ajax
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data:{
+                            ra_number : ra_number,
+                            ra_content : ra_content
+                        }
+                    }).done(function(result){
+                        if(result.code == 1){
+                            //alert('Gửi đánh giá thành công');
+                            location.reload();
+                        }
+                        else{
+                            alert('Xin hãy đăng nhập trước khi đánh giá');
+                            window.location.href="<?php echo url('/');?>/dang-nhap";
+                        }
+                    })
+                })
+           })
+
+           //hàm lưu sản phẩm vừa xem
+           $(function(){
+                //lấy id sản phẩm
+                let idProducts = $('.product-main-area').attr("data-id");
+                //lấy giá trị sessionStorage
+                let products = sessionStorage.getItem('products');
+                if (products == null) {
+                    //khởi tạo một mảng để lưu id
+                    let arrayProduct = new Array();
+                    //thêm id của product vào mảng
+                    arrayProduct.push(idProducts);
+                    //khởi tạo sessionStorage
+                    sessionStorage.setItem('products', JSON.stringify(arrayProduct));
+                    //(method) Storage.setItem(key: string, data: string): void có tham số là
+                    //string nên phải chuyển mảng sang string bằng hàm stringify()
+                }else{
+                    // used to parse a JSON string and returns resulting
+                    //JavaScript value or object described by the string.
+                    //chuyển thành mảng
+                    products = $.parseJSON(products);
+                    //check id existed in productsS
+                    if(products.indexOf(idProducts) === -1)
+                    {
+                        //khởi tạo sessionStorage , products đã tồn tại
+                        //thêm id của product vào mảng
+                         products.push(idProducts);
+                         sessionStorage.setItem('products', JSON.stringify(products));
+                    }
+                }
+                console.log(products);
+           })
+	</script>
+@endsection
 

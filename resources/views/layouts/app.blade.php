@@ -60,6 +60,9 @@
         <!-- modernizr js
             ============================================ -->
         <script src="{{asset('js/vendor/modernizr-2.8.3.min.js')}}"></script>
+
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <style>
             .error{
                 color: red;
@@ -68,10 +71,19 @@
             }
             .responsive {
                 width: 100%;
-                height: auto;
+                height: auto:
                 }
             .error-text{
                 color: red;
+                font-style: italic;
+            }
+            #scrollUp{
+                bottom: 138px;
+            }
+
+            .invalid-feedback{
+                color: red;
+                font-style: italic;
             }
         </style>
     </head>
@@ -110,6 +122,8 @@
         <script src="{{asset('js/jquery.countdown.min.js')}}"></script>
         <!-- price-slider js -->
         <script src="{{asset('js/price-slider.js')}}"></script>
+
+        <script src="{{asset('js/jquery.number.js')}}"></script>
         <!-- jquery.scrollUp js -->
         <!-- jquery.collapse js -->
 		<script src="{{asset('js/jquery.collapse.js')}}"></script>
@@ -130,22 +144,14 @@
         <script src="{{asset('js/plugins.js')}}"></script>
         <!-- main js -->
         <script src="{{asset('js/main.js')}}"></script>
-
-
-
         @yield('quick') <!-- phải bỏ dưới link jquery-1.11.2.min.js -->
         @yield('script')
         @yield('update')
+        @yield('timer')
+        @yield('price')
         <script>
             var msg = '{{Session::get('alert')}}';
             var exist = '{{Session::has('alert')}}';
-            if(exist){
-              alert(msg);
-            }
-        </script>
-        <script>
-            var msg = '{{Session::get('reg')}}';
-            var exist = '{{Session::has('reg')}}';
             if(exist){
               alert(msg);
             }

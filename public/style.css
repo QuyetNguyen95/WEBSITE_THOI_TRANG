@@ -797,7 +797,7 @@ z-index: 999;}
 .sale-title{margin-top: 15px;}
 .sale-title h3{font-size: 20px;
 text-transform: uppercase;}
-.timer{position:absolute;top:20px;left:20px;text-align:center;z-index:99}
+.timer{position:absolute;top:126px;left:37px;text-align:center;z-index:99}
 .timer span{background:#F57D65;text-transform:uppercase;
 font-weight:400;font-size:20px;color:#fff;width:60px;display:block}
 .timer span:before{}
@@ -3414,7 +3414,7 @@ margin-top: 35px;
 .product-tab .product-page-tab-content p{font-size: 15px;
 line-height: 28px;}
 .product-tab .product-page-comments{margin: 35px auto;
-max-width: 650px;
+max-width: 1200px;
 width: 100%;}
 .product-page-comments h2{font-size: 20px;
 font-weight: 700;

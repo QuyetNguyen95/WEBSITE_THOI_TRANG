@@ -20,7 +20,7 @@ $baseFilename = public_path() . '/uploads/' . $_FILES[$file]['name'];
 //$_FILES['fileupload']['error'] mảng báo lỗi
 //$_FILES['fileupload']['size'] kích thước file
 //$_FILES la 1 biến mảng se lu toan bo thong tin ve file upload
-//vi du ve cau truc cua $_FILES la: 
+//vi du ve cau truc cua $_FILES la:
 // $_FILE = Array
 //     (
 //         [file1] => Array
@@ -40,7 +40,7 @@ $baseFilename = public_path() . '/uploads/' . $_FILES[$file]['name'];
 //                 [error] => UPLOAD_ERR_OK
 //                 [size] => 98174
 //             )
-//     ) 
+//     )
 
 // thong tin file
 $info = new SplFileInfo($baseFilename);
@@ -62,7 +62,7 @@ return $data['code'] = 0;
 
 // Tên file mới
 $nameFile = trim(str_replace('.'.$ext,'',strtolower($info->getFilename())));
-// trim() sẽ loại bỏ khoẳng trắng( hoặc bất kì kí tự nào được cung cấp) dư thừa ở đầu và cuối chuỗi. 
+// trim() sẽ loại bỏ khoẳng trắng( hoặc bất kì kí tự nào được cung cấp) dư thừa ở đầu và cuối chuỗi.
 // str_replace($search, $replace, $subject) ; Hàm str_replace() sẽ thay thế tất cả các ký tự $search nằm trong $subject bằng ký tự $replace.
 // ham nay co nghia la bo duoi mo rong de lay ten file
 
@@ -85,7 +85,7 @@ if ( !\File::exists($path))
 mkdir($path,0777,true);
 }
 //File::exists sẽ kiểm tra xem file hoặc thư mục có tồn tại hay không.
-//mkdir — Makes directory , mkdir de tao thu muc voi 0777(mode) la mac dinh, 
+//mkdir — Makes directory , mkdir de tao thu muc voi 0777(mode) la mac dinh,
 
 // di chuyen file vao thu muc uploads
 move_uploaded_file($_FILES[$file]['tmp_name'], $path. $filename);
@@ -115,15 +115,15 @@ return '/uploads/'.$folder.'/' . date('Y/m/d', strtotime($time)) . '/' . $image;
 }
 }
 //Hàm explode() trong php có nhiệm vụ chuyển một chuỗi thành một mảng và mỗi phần tử được cắt bởi một chuỗi con nào đó
-//chuoi tren se la 
+//chuoi tren se la
 // Array(
 // 	[0] => nam-thang-ngay
 // 	[1] => ten-cua-file-anh.duoimorong
 // )
 //strtotime(time) để chuyển đổi dữ liệu ngày tháng về kiểu INT. vi du chuyen ngay thang thanh //output: 1487517353
-  
 
-//ham lay thong tin khi dang nhap  
+
+//ham lay thong tin khi dang nhap
 if (!function_exists('get_data_user'))
 {
 function get_data_user($type,$field = 'id')

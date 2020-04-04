@@ -7,9 +7,14 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use App\Http\Requests\RequestPageStatic;
 use App\Models\PageStatic;
-class AdminPageStaticController extends Controller
+class AdminPageStaticController extends AdminHeaderController
 {
-   
+
+    public function __construct()
+	{
+		parent::__construct();
+	}
+
     public function index()
     {
         $page_statics = PageStatic::all();
@@ -22,7 +27,7 @@ class AdminPageStaticController extends Controller
     }
 
     public function store(RequestPageStatic $requestPageStatic)
-    { 
+    {
         $this->insertOrUpdate($requestPageStatic);
         return redirect()->back()->with('success','Thêm thành công');
     }

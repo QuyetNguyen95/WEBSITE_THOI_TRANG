@@ -2,78 +2,81 @@
 
 namespace Modules\Admin\Http\Controllers;
 
+use App\User;
+use Carbon\Carbon;
+use App\Models\Rating;
+use App\Models\Article;
+use App\Models\Contact;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
-class AdminController extends Controller
+class AdminController extends AdminHeaderController
 {
-    /**
-     * Display a listing of the resource.
-     * @return Response
-     */
+
+    public function __construct()
+	{
+		parent::__construct();
+	}
+
     public function index()
     {
-        return view('admin::index');
-    }
+        //đếm số thành viên
+        $userCount = User::count();
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Response
-     */
-    public function create()
-    {
-        return view('admin::create');
-    }
+        //Đếm số sản phẩm
+        $productCount = Product::count();
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        //đếm số bài viết
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        return view('admin::show');
-    }
+        $articleCount = Article::count();
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        return view('admin::edit');
-    }
+        //đếm số lượt đánh giá
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        $ratingCount = Rating::count();
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
+        //danh sách đơn hàng
+
+        $transactions = Transaction::with('user:id,name')->orderBy('id','desc')->limit(10)->get();
+
+        //danh sách thành viên
+
+        $users = User::select('name','phone','email')->whereraw(1)->limit(10)->get();
+
+        //doanh thu ngày
+        $dayMoney = Transaction::whereDay('updated_at',date('d'))->where('tr_status',1)->sum('tr_total');
+
+        // doanh thu tuần
+
+        $weekMoney = Transaction::whereBetween('updated_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+        ->where('tr_status',1)->sum('tr_total');
+
+        //doanh thu tháng
+        $monthMoney = Transaction::whereMonth('updated_at',date('m'))->where('tr_status',1)->sum('tr_total');
+
+        //tính số lượng của từng danh mục sản phẩm
+        //lấy danh mục sản phẩm
+        $categorys = Category::select('id')->get();
+        $arrayCate = $categorys->toArray();
+        foreach ($arrayCate as $value) {
+            $products = Product::whereIn('id',$value)->count();
+        }
+
+
+        $data = [
+            'userCount'     => $userCount,
+            'productCount'  => $productCount,
+            'articleCount'  => $articleCount,
+            'ratingCount'   => $ratingCount,
+            'transactions'  => $transactions,
+            'users'         => $users,
+            'dayMoney'      => $dayMoney,
+            'monthMoney'    => $monthMoney,
+            'weekMoney'     => $weekMoney
+        ];
+        return view('admin::home.index',$data);
     }
 }

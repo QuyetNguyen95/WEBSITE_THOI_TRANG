@@ -3,14 +3,22 @@
 <div class="main-content">
     <div class="section__content section__content--p30">
         <div class="container">
-            <ul class="breadcrumb">
-              <li><a href="#">Trang chủ</a></li>
-              <li><a href="#">Thành viên</a></li>
-              <li>Danh sách</li>
-            </ul>
-            <div class="row" style="margin-bottom: 40px">
-                <div class="col-md-12">
-                        <h2 class="title-1">Quản lý thành viên</h2>
+            <div class="viewport-header">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb has-arrow">
+                    <li class="breadcrumb-item">
+                        <a href="{{route('admin.dashboard')}}">Trang chủ</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{route('admin.get.list.user')}}">Thành viên</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Danh sách</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="row" style="margin-bottom: 40px;">
+                <div class="col-md-12" style="display: flex">
+                        <h2 class="title-1">Quản lý thành viên </h2>
                 </div>
             </div>
             </div>
@@ -38,7 +46,9 @@
                                 <td>{{$user->phone}}</td>
                                 <td></td>
                                 <td>
-                                 <a href="{{route('admin.get.action.user',['delete',$user->id])}}" style="padding: 5px 10px;border: 1px solid #999; font-size: 12px;"><i class="glyphicon glyphicon-trash"></i> Xóa</a>
+                                    <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
+                                        <a href="{{route('admin.get.action.user',['delete',$user->id])}}"> <i class="text-info mdi mdi-delete"></i></a>
+                                    </button>
                                 </td>
                               </tr>
                               <?php $stt++; ?>

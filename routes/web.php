@@ -34,6 +34,13 @@ Route::group(['namespace' => 'auth'], function() {
 
     //dang xuat
     Route::get('/dang-xuat','LoginController@getLogout')->name('get.logout');
+
+    //lấy lại mật khẩu
+
+    Route::get('/lay-lai-mat-khau','ForgotPasswordController@getFormResetPassword')->name('get.reset.password');
+	Route::post('/lay-lai-mat-khau','ForgotPasswordController@sendCodeResetPassword');
+	Route::get('/password/reset','ForgotPasswordController@resetPassword')->name('get.link.reset.password');
+	Route::post('/password/reset','ForgotPasswordController@saveResetPassword');
 });
 
 
@@ -42,17 +49,43 @@ Route::group(['namespace' => 'auth'], function() {
 Route::group(['prefix' => 'shopping'], function() {
     Route::post('/add/{id}','ShoppingController@addProducts')->name('add.products.shopping');
     Route::get('danh-sach','ShoppingController@showProducts')->name('show.products.shopping');
-    Route::get('/delete/{rowId}','ShoppingController@delete')->name('delete.products.shopping');
-    Route::get('/quantity/{rowId}/{id}','ShoppingController@quantity')->name('quantity.products.shopping');
-    Route::post('/quantity/{rowId}/{id}','ShoppingController@quantity');
+    Route::post('/delete','ShoppingController@delete')->name('delete.products.shopping');
+    Route::post('/quantity','ShoppingController@quantity')->name('quantity.products.shopping');
 
 });
 
-//thanh toan
+//đánh giá
+Route::group(['prefix' => 'ajax','middleware'=> 'CheckLoginRatting'], function() {
+    Route::post('danh-gia/{id}','RatingController@saveRating')->name('post.rating.product');
+    Route::post('reply/{id}','RatingController@saveReplyComment')->name('post.reply.comment.product');
+
+});
+
+//sản phẩm vừa xem
+Route::group(['prefix' => 'ajax'], function() {
+    Route::post('renderViewProduct','HomeController@renderViewProduct')->name('render.view.product');
+});
+
+//thanh toán
 Route::group(['prefix' => 'shopping','middleware'=> 'CheckLoginUser'], function() {
     Route::get('thanh-toan','ShoppingController@getPay')->name('get.pay.shopping');
     Route::post('thanh-toan','ShoppingController@saveTransaction');
 });
+
+//trang quản lý user
+Route::group(['prefix' => 'user','middleware'=> 'CheckLoginUser'], function() {
+    Route::get('/dashboard','UserController@index')->name('get.index.user');
+    Route::get('/info','UserController@updateInfo')->name('get.update.user');
+    Route::post('/info','UserController@saveInfo');
+    Route::get('/pass','UserController@updatePass')->name('get.pass.user');
+    Route::post('/pass','UserController@savePass');
+    Route::get('/watch','UserController@justWatch')->name('get.just.watch.user');
+    Route::post('/watch','UserController@viewjustWatch')->name('get.view.just.watch.user');
+    Route::get('/bestSell','UserController@bestSellingProduct')->name('get.best.sell.user');
+});
+
+
+
 
 //Lien he
 
@@ -62,6 +95,8 @@ Route::group(['prefix' => 'shopping','middleware'=> 'CheckLoginUser'], function(
 //Page tinh
 
    Route::get('thong-tin/{page}-{id}','PageStaticController@action')->name('get.action.static') ;
+
+
 
 
 

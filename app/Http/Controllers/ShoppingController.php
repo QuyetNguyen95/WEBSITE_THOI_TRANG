@@ -1,12 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Cart;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Transaction;
-use App\Models\Order;
+use Illuminate\Http\Request;
+use App\Mail\ProductInformation;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\FrontendController;
+
 class ShoppingController extends FrontendController
 {
     public function __construct()
@@ -16,21 +21,38 @@ class ShoppingController extends FrontendController
 	//them san pham vao gio hang
 	public function addProducts(Request $request,$id)
 	{
-
         //kiểm tra số lướng đặt sản phẩm ở chi tiết giỏ hàng có lớn hơn lượng sản phẩm đã đặt không
+        //lấy id của sản phẩm
+        $product = Product::find($id);
+        //lấy thông tin của giỏ hàng
         $productCarts = Cart::content();
+
+
         foreach($productCarts as $productCart){
-            if($productCart->id == $id && $request->qty > 5-$productCart->qty)
+           if($productCart->id == $id)//kiểm tra id sản phẩm đúng sản phẩm cần kiểm kiểm tra
+           {
+            //kiểm tra số lượng sản phẩm so với kho hàng
+            if($request->qty > $product->pro_number - $productCart->qty)
+            {
+                return redirect()->back()->with('warning','Số lượng vượt quá số lượng trong kho ');
+            }
+            //kiểm tra số lượng sản phẩm so với yêu cầu
+            if($request->qty > 5-$productCart->qty)
             {
                 return redirect()->back()->with('warning','Số lượng tối đã được mua là 5 sản phẩm cho mỗi loại');
             }
+           }
         }
 
+
         //lấy thông tin của sản phẩm qua id
-		$product = Product::find($id);
+
 		if (!$product->id) {
 			return redirect('/');
         }
+
+
+
         //lấy size sản phẩm qua request
         if ($request->size) {
             $size = $request->size;
@@ -46,7 +68,9 @@ class ShoppingController extends FrontendController
         }
         //lấy số lượng sản phẩm từ input so sánh với qty trong database
         if($request->qty <= 5) {
-            if($request->qty)
+
+            if ($product->pro_number>=$request->qty) {
+                if($request->qty)
             {
                 $qty = $request->qty;
             }else{
@@ -63,12 +87,16 @@ class ShoppingController extends FrontendController
                     'avatar'    => $product->pro_avatar,
                     'price_old' => $product->pro_price,
                     'size'      => $size,
-                    'color'     => $color
+                    'color'     => $color,
+                    'slug'      => $product->pro_slug,
+                    'number'    => $product->pro_number
 
                 ]]);
             //mac dinh cua Cart co cac truong id, nam, qty,price va muon them truong khac thi phai dua vao mang options
 
             return redirect()->back()->with('success', 'Thêm vào giỏ hàng thành công!');
+            }
+            return redirect()->back()->with('warning','Số lượng vượt quá số lượng trong kho');
         }
         return redirect()->back()->with('warning','Số lượng tối đã được mua là 5 sản phẩm cho mỗi loại');
 
@@ -95,37 +123,33 @@ class ShoppingController extends FrontendController
 	//xoa san pham khoi gio hang
 
 
-	public function delete($rowId)
+	public function delete(Request $request)
 	{
-		if ($rowId) {
-			Cart::remove($rowId);
-		}
 
-		return redirect()->back()->with('danger','Xóa sản phẩm thành công');
+		if($request->ajax())
+        {
+            Cart::remove($request->rowId);
+
+            return response()->json(["code" => 1]);
+        }
 	}
 
 	//phần cập nhật số lượng giỏ hàng
-	public function quantity($rowId,$id,Request $request)
+	public function quantity(Request $request)
 	{
-        $product = Product::select('pro_number')->find($id);
+        if($request->ajax())
+        {
+            Cart::update($request->rowId,$request->qty);
 
-        if($request->quantity <= 5){
-
-          Cart::update($rowId, $request->quantity);
-
-          return redirect()->back()->with('info','Cập nhật giỏ hàng thành công');
-      } else {
-           return redirect()->back()->with('warning','Số lượng tối đã được mua là 5 sản phẩm cho mỗi loại');
-
+            return response()->json(["code" => 1]);
         }
-
 	}
 
 	//lua don hang va chi tiet don hang vao database
 
 	public function saveTransaction(Request $request)
 	{
-        dd($request->all());
+
         $total = Cart::subtotal(0,'','');
         //lưa transaction vào dattabase đồng thời lấy ra id của transaction bằng insertGetId() để dùng cho order
 		$idTransaction = Transaction::insertGetId([
@@ -153,8 +177,18 @@ class ShoppingController extends FrontendController
 					'updated_at'        => Carbon::now()
 				]);
 			}
-		}
+        }
 
+        //gửi thông tin sản phẩm qua email
+        //lấy địa chi email của khách hàng
+        $email = $request->email;
+        $data = [
+            'address' => $request->address,
+            'phone'   => $request->phone
+        ];
+        //phone và address là data user có thể thay đổi
+
+        Mail::to($email)->send(new ProductInformation($products,$data));
         Cart::destroy();
         //sau khi lưu giỏ hàng thành công thì xóa giỏ hàng
 		return redirect()->route('home')->with('alert', 'Mua hàng công, cảm ơn bạn đã mua hàng ở website chúng tôi,vui lòng kiểm tra email của bạn để biết chi tiết đơn hàng!');

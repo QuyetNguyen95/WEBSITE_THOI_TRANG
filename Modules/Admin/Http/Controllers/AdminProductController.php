@@ -8,8 +8,13 @@ use Illuminate\Routing\Controller;
 use App\Http\Requests\RequestProduct;
 use App\Models\Product;
 use App\Models\Category;
-class AdminProductController extends Controller
+class AdminProductController extends AdminHeaderController
 {
+
+    public function __construct()
+	{
+		parent::__construct();
+	}
 
     public function index(Request $request)
     {
@@ -83,6 +88,7 @@ class AdminProductController extends Controller
                 $product->pro_avatar = $file['name'];
             }
         }
+
         if ($requestProduct->hasFile('avatar2')) {
             $file = upload_image('avatar2');
             if (isset($file['name'])) {

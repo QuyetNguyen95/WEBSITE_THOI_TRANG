@@ -41,7 +41,6 @@
          <div class="row">
             <!-- sidebar start -->
             <div class="col-lg-3 col-md-3 col-sm-12">
-
                 <!-- product type start -->
                 <div class="shop-categories shop-space">
                     <h2 class="shop-sidebar-title"><span>Loại sản phẩm</span></h2>
@@ -50,7 +49,7 @@
                         @if (isset($listProductTypes))
                             @foreach ($listProductTypes as $listProductType)
                               <li><a href="{{request()->fullUrlWithQuery(['type' => str_slug(str_replace(' ','-',$listProductType ))])}}"
-                                   style="{{Request::get('type') == $listProductType ? 'background: white ;color:black; border: 1px solid #83cbdc;' : ''}}">
+                                   style="{{Request::get('type') == str_slug(str_replace(' ','-',$listProductType )) ? 'background: white ;color:black; border: 1px solid #83cbdc;' : ''}}">
                                    {{$listProductType}}</a></li>
                             @endforeach
                         @endif
@@ -202,12 +201,18 @@
                                        [$singleProduct->pro_slug,$singleProduct->id])}}"><i class="fa fa-toggle-off"></i></a>
                                     </div>
                                  </div>
+                                 <?php
+                                    $averageRating = 0;
+                                    if ($singleProduct->pro_total_rating > 0) {
+                                        $averageRating = $singleProduct->pro_total_number/$singleProduct->pro_total_rating;
+                                    }
+
+                                ?>
                                  <div class="product-content">
                                     <div class="pro-rating">
-                                       <a href="#"><i class="fa fa-star"></i></a>
-                                       <a href="#"><i class="fa fa-star"></i></a>
-                                       <a href="#"><i class="fa fa-star"></i></a>
-                                       <a href="#"><i class="fa fa-star-o"></i></a>
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <a href="#"><i class="fa {{$i<=$averageRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                                        @endfor
                                     </div>
                                     <h5><a href="{{route('get.detail.product',[$singleProduct->pro_slug,$singleProduct->id])}}"
                                         style="text-overflow: ellipsis; overflow: hidden;white-space: nowrap;">

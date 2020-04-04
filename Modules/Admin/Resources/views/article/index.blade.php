@@ -3,24 +3,33 @@
 <div class="main-content">
     <div class="section__content section__content--p30">
         <div class="container">
-            <ul class="breadcrumb">
-              <li><a href="#">Trang chủ</a></li>
-              <li><a href="{{route('admin.get.list.article')}}">Bài viết</a></li>
-              <li>Danh sách</li>
-            </ul>
-            <div class="row" style="margin-bottom: 40px">
-                <div class="col-md-12">
-                        <h2 class="title-1">Quản lý sản phẩm <a href="{{route('admin.get.create.article')}}" class="pull-right"><i class="fa fa-plus" style="margin-left: -134px"></i></a></h2>
+            <div class="viewport-header">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb has-arrow">
+                    <li class="breadcrumb-item">
+                        <a href="{{route('admin.dashboard')}}">Trang chủ</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{route('admin.get.list.article')}}">Bài viết</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Danh sách</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="row" style="margin-bottom: 40px;">
+                <div class="col-md-12" style="display: flex">
+                        <h2 class="title-1">Quản lý bài viết </h2>
+                        <h2><a href="{{route('admin.get.create.article')}}"><i class="mdi mdi-library-plus" style="margin-left: 700px"></i></a></h2>
                 </div>
             </div>
             </div>
-            <div class="row">
+            <div class="row" style="margin-bottom: 30px">
               <div class="col-md-12">
                  <form class="form-inline" >
-                <div class="form-group">
+                <div class="form-group" style="margin-right: 10px">
                   <input type="text" class="form-control"  placeholder="Tên sản phẩm" name="name" value="{{Request::get('name')}}">
                 </div>
-                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                <button type="submit" class="btn btn-sm btn-outline-info"><i class="mdi mdi-magnify"></i></button>
               </form>
               </div>
             </div>
@@ -53,16 +62,20 @@
                                   <td>{{$article->a_description}}</td>
                                   <td>{{$article->a_author}}</td>
                                    <td>
-                                      <a href="{{route('admin.get.action.article',['active',$article->id])}}" class="label {{$article->getStatus()['class']}}">{{$article->getStatus()['name']}}</a>
+                                      <a href="{{route('admin.get.action.article',['active',$article->id])}}" class="btn btn-xs {{$article->getStatus()['class']}}">{{$article->getStatus()['name']}}</a>
                                   </td>
                                   <td>
-                                      <a href="{{route('admin.get.action.article',['hot',$article->id])}}" class="label {{$article->getHot()['class']}}">{{$article->getHot()['name']}}</a>
+                                      <a href="{{route('admin.get.action.article',['hot',$article->id])}}" class="btn btn-xs {{$article->getHot()['class']}}">{{$article->getHot()['name']}}</a>
                                   </td>
                                   <td>{{$article->created_at}}</td>
                                   <td>
-                                    <a href="{{route('admin.get.edit.article',$article->id)}}" style="padding: 5px 10px;border: 1px solid #999; font-size: 12px;"><i class="fa fa-edit"></i> Cập nhật</a>
-                                    <a href="{{route('admin.get.action.article',['delete',$article->id])}}" style="padding: 5px 10px;border: 1px solid #999; font-size: 12px;"><i class="glyphicon glyphicon-trash"></i> Xóa</a>
-                                  </td> 
+                                    <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
+                                        <a href="{{route('admin.get.edit.article',$article->id)}}"> <i class="text-info mdi mdi-autorenew"></i></a>
+                                    </button>
+                                    <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
+                                        <a href="{{route('admin.get.action.article',['delete',$article->id])}}"> <i class="text-info mdi mdi-delete"></i></a>
+                                    </button>
+                                  </td>
                                </tr>
                                <?php $stt++; ?>
                               @endforeach

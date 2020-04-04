@@ -26,7 +26,7 @@
                 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-user"></i> {{Auth::user()->name}}</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="min-width:150px; text-align:center;">
-                  <a class="dropdown-item" href="#">Tài khoản cua bạn</a>
+                  <a class="dropdown-item" href="{{route('get.index.user')}}">Tài khoản của bạn</a>
                 </div>
             </li>
               <li><a href="{{route('get.logout')}}">Đăng xuất</a></li>
@@ -129,4 +129,17 @@
       </div>
     </div>
     <!-- mainmenu-area end -->
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/5e7b68bf69e9320caabce35c/default';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
   </header>

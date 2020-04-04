@@ -3,14 +3,22 @@
 <div class="main-content">
     <div class="section__content section__content--p30">
         <div class="container">
-            <ul class="breadcrumb">
-              <li><a href="#">Trang chủ</a></li>
-              <li><a href="#">Đơn hàng</a></li>
-              <li>Danh sách</li>
-            </ul>
-            <div class="row" style="margin-bottom: 40px">
-                <div class="col-md-12">
-                        <h2 class="title-1">Quản lý đơn hàng </h2>
+            <div class="viewport-header">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb has-arrow">
+                    <li class="breadcrumb-item">
+                        <a href="{{route('admin.dashboard')}}">Trang chủ</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{route('admin.get.list.transaction')}}">Đơn hàng</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Danh sách</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="row" style="margin-bottom: 40px;">
+                <div class="col-md-12" style="display: flex">
+                    <h2 class="title-1">Quản lý đơn hàng </h2>
                 </div>
             </div>
             </div>
@@ -48,8 +56,12 @@
                                   </td>
                                   <td>{{$transaction->created_at}}</td>
                                   <td>
-                                     <a href="{{route('admin.get.action.transaction',['delete',$transaction->id])}}" style="padding: 5px 10px;border: 1px solid #999; font-size: 12px;"><i class="glyphicon glyphicon-trash"></i> Xóa</a>
-                                      <a class="btn_customer_action js_order_item" data-id="{{$transaction->id}}" href="{{route('admin.get.view.transaction',$transaction->id)}}" style="padding: 5px 10px;border: 1px solid #999; font-size: 12px;"><i class="fa fa-eye"></i></a>
+                                    <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
+                                        <a href="{{route('admin.get.action.transaction',['delete',$transaction->id])}}"> <i class="text-info mdi mdi-delete"></i></a>
+                                    </button>
+                                    <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
+                                        <a href="{{route('admin.get.view.transaction',$transaction->id)}}"> <i class="text-info mdi mdi-eye"></i></a>
+                                    </button>
                                   </td>
                                 </tr>
                                 <?php $stt++; ?>
@@ -57,7 +69,7 @@
                             @endif
                         </tbody>
                   </table>
-                 <div class="pull-right">
+                 <div>
                     {{$transactions->links()}}
                  </div>
                </div>
@@ -65,44 +77,5 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="myModalOrder" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Chi tiết mã đơn hàng #<b class="trasaction_id"></b></h4>
-            </div>
-            <div class="modal-body">
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-@stop
-@section('script')
-  <script type="text/javascript">
-    $(function(){
-      $(".js_order_item").click(function(e){
-        e.preventDefault();
-        let $this = $(this);
-        let url = $this.attr('href');
-        $('.modal-body').html('');//set lai order bang rong
-        $(".trasaction_id").text($this.attr("data-id"));
-        $("#myModalOrder").modal('show');
-        $.ajax({
-          url: url
-        }).done(function(result){
-          if (result)
-           {
-             $('.modal-body').append(result);//ket qua tra ve cua viewOrder
-           }
-        })
-      })
-    })
-  </script>
 @stop
 

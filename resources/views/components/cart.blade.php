@@ -16,7 +16,7 @@
                                     <h4 style="text-overflow: ellipsis;white-space: nowrap; overflow: hidden; width: 160px;">{{$order->name}}</h4></a>
                                 <span>{{number_format($order->price,0,'','.')}} đ</span>
                             </div>
-                            <div class="pro-del"><a href="{{route('delete.products.shopping',$order->rowId)}}"><i class="fa fa-times-circle"></i></a></div>
+                            <div class="pro-del"><a href="{{route('delete.products.shopping')}}" class="deleteCart" data-rowId="{{$order->rowId}}"><i class="fa fa-times-circle"></i></a></div>
                         </div>
                         <div class="clear"></div>
                         @endforeach
@@ -45,3 +45,37 @@
               </div>
             </div>
           </div>
+@section('update')
+    <script>
+        $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+        });
+        $(document).ready(function(){
+
+            $('.deleteCart').click(function(e){
+                    e.preventDefault();
+                    //lấy đường dẩn url
+                    let url = $(this).attr('href');
+                    //lấy rowId của sản phẩm
+                    let rowId = $(this).attr('data-rowId');
+                    console.log(url,rowId);
+                   //hàm ajax xử lý dữ liệu
+                   $.ajax({
+                        url : url ,
+                        type: "POST",
+                        data: {
+                            rowId : rowId
+                        }
+                    }).done(function(result){
+                        if(result.code == 1)
+                        {
+                            location.reload();
+                            alert('Xóa sản phẩm thành công');
+                        }
+                    })
+                })
+        })
+    </script>
+@endsection

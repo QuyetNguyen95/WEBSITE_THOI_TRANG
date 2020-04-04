@@ -33,7 +33,7 @@
                     <input type="number" id="french-hens" value="1" name="qty" min="1">
                 </div>
                 @if ($product->pro_number > 0)
-                <button class="single_add_to_cart_button" type="submit">
+                <button class="single_add_to_cart_button" type="submit" class="add">
                     Thêm vào giỏ</button>
                 @else
                 <button class="single_add_to_cart_button" type="button">Hết hàng</button>
@@ -59,3 +59,4 @@
     <!-- .product-info -->
 </div>
 @endif
+

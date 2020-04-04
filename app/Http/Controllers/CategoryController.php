@@ -18,10 +18,7 @@ class CategoryController extends FrontendController
     public function getListProduct(Request $request)
     {
 
-
-
         //show danh sách các loại sản phẩm
-
     	//show product of category
     	$getCategorySingle = preg_split('/(-)/i',$request->segment(2));
 
@@ -41,13 +38,14 @@ class CategoryController extends FrontendController
 
 
     	//lọc sản phẩm theo loại
-
     	if ($request->type) {
-    		$type = $request->type;
-    		$listProduct = Product::where([
-    			'pro_type' => $type,
-    			'pro_category_id' => $id
-    		]);
+    		if ($request->type) {
+                $type = str_replace('-',' ',$request->type);
+                $listProduct = Product::where([
+                    'pro_type'        => $type,
+                    'pro_category_id' => $id
+                ]);
+            }
     	}
 
     	//Tìm kiếm sản phẩm
@@ -149,7 +147,6 @@ class CategoryController extends FrontendController
          }
 
         $listProduct = $listProduct->paginate(12);
-
         //lấy các ti tức nỗi bật
         $hotArticles = Article::where('a_hot',Article::HOT_PUBLIC)->orderBy('id','desc')->limit(4)->get();
 
@@ -165,5 +162,20 @@ class CategoryController extends FrontendController
     	];
 
     	return view('product.index',$data);
+    }
+    public function filterProduct(Request $request){
+        if($request->ajax())
+        {
+            //show product of category
+            $getCategorySingle = preg_split('/(-)/i',$request->segment(2));
+            $listProduct = Product::where('pro_active',Product::STATUS_PUBLIC);
+            $id = array_pop($getCategorySingle);
+            $listProduct = $listProduct->where('pro_category_id',$id);
+            $min = $request->min_price;
+            $max = $request->max_price;
+            $listProduct = $listProduct->whereBetween('pro_price',[$min,$max])->paginate(12);
+            $html = view('product.product_filter',compact('listProduct'))->render();
+            return response()->json($html);
+        }
     }
 }

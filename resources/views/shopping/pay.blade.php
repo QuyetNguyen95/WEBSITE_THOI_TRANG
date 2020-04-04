@@ -29,19 +29,19 @@
                             <div class="col-md-12">
                                 <div class="checkout-form-list">
                                     <label>Họ và tên <span class="required">*</span></label>
-                                    <input type="text" placeholder="Họ và tên của bạn" class="form-control" value="{{Auth::user()->name}}" name="name"  />
+                                    <input type="text" placeholder="Họ và tên của bạn" class="form-control" value="{{Auth::user()->name}}" name="name" readonly="readonly"  />
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="checkout-form-list">
                                     <label>Địa chỉ <span class="required">*</span></label>
-                                    <input type="text" placeholder="Địa chỉ của bạn" class="form-control"  name="address"  />
+                                    <input type="text" placeholder="Địa chỉ của bạn" class="form-control"  name="address" value="{{Auth::user()->address}}"  />
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="checkout-form-list">
                                     <label>Email <span class="required">*</span></label>
-                                    <input type="email" placeholder="Email của bạn" class="form-control" required name="email" value="{{Auth::user()->email}}" />
+                                    <input type="email" placeholder="Email của bạn" class="form-control" required name="email" value="{{Auth::user()->email}}"  readonly="readonly" />
                                 </div>
                             </div>
                             <div class="col-md-12">

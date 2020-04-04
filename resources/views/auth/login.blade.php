@@ -23,7 +23,7 @@
                                 <button type="submit" class="btn btn-default" style="color: #fffbfb; background-color: #83cbdc;border-color: #83cbdc;">Đăng nhập</button>
                             </div>
                             <div class="form-group">
-                                <p><span style="margin-left: 30px;">Bạn không có tài khoản? <a href="{{route('get.register')}}">Đăng ký</a></span> <span style="margin-left: 30px;">Bạn quên mật khẩu ? <a href="#">Click here</a></span></p>
+                                <p><span style="margin-left: 30px;">Bạn không có tài khoản? <a href="{{route('get.register')}}" >Đăng ký</a></span> <span style="margin-left: 30px;">Bạn quên mật khẩu ? <a href="{{route('get.reset.password')}}" target="_blank">Click here</a></span></p>
                             </div>
                         </form>
                     </div><!--/login form-->

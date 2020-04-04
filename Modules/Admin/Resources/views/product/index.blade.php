@@ -1,26 +1,40 @@
 @extends('admin::layouts.master')
 @section('content')
+<style>
+    .rating .active{
+        color:#ff9705;
+    }
+</style>
 <div class="main-content">
     <div class="section__content section__content--p30">
         <div class="container">
-            <ul class="breadcrumb">
-              <li><a href="#">Trang chủ</a></li>
-              <li><a href="#">Sản phẩm</a></li>
-              <li>Danh sách</li>
-            </ul>
-            <div class="row" style="margin-bottom: 40px">
-                <div class="col-md-12">
-                        <h2 class="title-1">Quản lý sản phẩm <a href="{{route('admin.get.create.product')}}" class="pull-right"><i class="fa fa-plus" style="margin-left: -134px"></i></a></h2>
+            <div class="viewport-header">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb has-arrow">
+                    <li class="breadcrumb-item">
+                        <a href="{{route('admin.dashboard')}}">Trang chủ</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{route('admin.get.list.product')}}">Sản phẩm</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Danh sách</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="row" style="margin-bottom: 40px;">
+                <div class="col-md-12" style="display: flex">
+                        <h2 class="title-1">Quản lý sản phẩm </h2>
+                        <h2><a href="{{route('admin.get.create.product')}}"><i class="mdi mdi-library-plus" style="margin-left: 700px"></i></a></h2>
                 </div>
             </div>
             </div>
-            <div class="row">
+            <div class="row" style="margin-bottom: 30px">
               <div class="col-md-12">
                  <form class="form-inline" >
                 <div class="form-group">
                   <input type="text" class="form-control"  placeholder="Tên sản phẩm" name="name" value="{{Request::get('name')}}">
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="margin-left: 10px;margin-right: 10px;">
                    <select name="category" id="" class="form-control">
                       <option value="">Tên danh mục</option>
                       @if(isset($categories))
@@ -30,7 +44,7 @@
                       @endif
                    </select>
                 </div>
-                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                <button type="submit" class="btn btn-sm btn-outline-info"><i class="mdi mdi-magnify"></i></button>
               </form>
               </div>
             </div>
@@ -39,7 +53,7 @@
                    <table class="table">
                         <thead>
                           <tr>
-                            <th>#</th>
+                            <th>STT</th>
                             <th>Tên sản phẩm</th>
                             <th>Danh mục</th>
                             <th>Hình ảnh</th>
@@ -56,11 +70,25 @@
                                <tr>
                                   <td>{{$stt}}</td>
                                   <td>{{$product->pro_name}}
-                                    <ul style="list-style: none; margin-left: 12px">
+                                    <ul style="list-style: none;margin-left: -38px;">
                                       <li>Loại sản phẩm: {{$product->pro_type}}</li>
                                       <li>Giá cả: {{$product->pro_price}} VNĐ</li>
                                       <li>Sale: {{$product->pro_sale}}%</li>
-                                      <li>Đánh giá:</li>
+                                      <?php
+                                        $averageRating = 0;
+                                        if ($product->pro_total_rating > 0) {
+                                            $averageRating = round($product->pro_total_number/$product->pro_total_rating,2);
+                                        }
+
+                                        ?>
+                                      <li>Đánh giá:
+                                        <div class="rating" style="color: #999;display: initial;">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <i class="mdi mdi-star {{$i <= $averageRating ? 'active' : ''}}"></i>
+                                            @endfor
+                                            /{{$averageRating}}
+                                        </div>
+                                      </li>
                                       <li>Số lượng: {{$product->pro_number}}</li>
                                       <li>Màu: {{$product->pro_color}}</li>
                                       <li>Size: {{$product->pro_size}}</li>
@@ -74,14 +102,18 @@
                                      <img src="{{pare_url_file($product->pro_img)}}" width="80px" height="80px">
                                   </td>
                                    <td>
-                                      <a href="{{route('admin.get.action.product',['active',$product->id])}}" class="label {{$product->getStatus()['class']}}">{{$product->getStatus()['name']}}</a>
+                                      <a href="{{route('admin.get.action.product',['active',$product->id])}}" class="btn btn-xs {{$product->getStatus()['class']}}">{{$product->getStatus()['name']}}</a>
                                   </td>
                                   <td>
-                                      <a href="{{route('admin.get.action.product',['hot',$product->id])}}" class="label {{$product->getHot()['class']}}">{{$product->getHot()['name']}}</a>
+                                      <a href="{{route('admin.get.action.product',['hot',$product->id])}}" class="btn btn-xs {{$product->getHot()['class']}}">{{$product->getHot()['name']}}</a>
                                   </td>
                                   <td>
-                                    <a href="{{route('admin.get.edit.product',$product->id)}}" style="padding: 5px 10px;border: 1px solid #999; font-size: 12px;"><i class="fa fa-edit"></i> Cập nhật</a>
-                                    <a href="{{route('admin.get.action.product',['delete',$product->id])}}" style="padding: 5px 10px;border: 1px solid #999; font-size: 12px;"><i class="glyphicon glyphicon-trash"></i> Xóa</a>
+                                    <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
+                                    <a href="{{route('admin.get.edit.product',$product->id)}}"> <i class="text-info mdi mdi-autorenew"></i></a>
+                                    </button>
+                                    <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
+                                        <a href="{{route('admin.get.action.product',['delete',$product->id])}}"> <i class="text-info mdi mdi-delete"></i></a>
+                                    </button>
                                   </td>
                                </tr>
                                <?php $stt++; ?>

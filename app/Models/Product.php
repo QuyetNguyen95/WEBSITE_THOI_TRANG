@@ -17,24 +17,24 @@ class Product extends Model
     protected $status = [
     	1 => [
     		'name'  => 'Public',
-    		'class' => 'label-danger'
+    		'class' => 'btn-danger'
     	],
 
     	0 => [
     		'name'  => 'Private',
-    		'class' => 'label-default'
+    		'class' => 'btn-default'
     	]
     ];
 
     protected $hot = [
     	1 => [
     		'name'  => 'Nổi bật',
-    		'class' => 'label-info'
+    		'class' => 'btn-info'
     	],
 
     	0 => [
     		'name'  => 'Không',
-    		'class' => 'label-default'
+    		'class' => 'btn-default'
     	]
     ];
     public function getStatus()

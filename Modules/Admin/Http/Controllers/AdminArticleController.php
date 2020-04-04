@@ -7,14 +7,19 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use App\Models\Article;
 use App\Http\Requests\RequestArticle;
-class AdminArticleController extends Controller
+class AdminArticleController extends AdminHeaderController
 {
-    
+
+    public function __construct()
+	{
+		parent::__construct();
+	}
+
     public function index(Request $request)
     {
         $articles = Article::whereraw(1);
         //lay du lieu khong can dung get()
-        //select*from 'articles' where 1 voi 1 la dieu kien luon luon dung 
+        //select*from 'articles' where 1 voi 1 la dieu kien luon luon dung
         if($request->name) $articles = $articles->where('a_name','like','%'.$request->name.'%');
         $articles = $articles->orderBy('created_at','desc')->paginate(5);
 
@@ -29,7 +34,7 @@ class AdminArticleController extends Controller
         return view('admin::article.create');
     }
 
-   
+
    public function store(RequestArticle $requestArticle)
 
     {
@@ -37,7 +42,7 @@ class AdminArticleController extends Controller
         return redirect()->back()->with('success','Thêm bài viết thành công');
     }
 
-  
+
     public function edit ($id)
 
     {
@@ -55,7 +60,7 @@ class AdminArticleController extends Controller
      public function inserOrUpdate(RequestArticle $requestArticle, $id='')
     {
         $article = new Article();
-        
+
 
         if ($id)  $article = Article::find($id);
 
@@ -92,7 +97,7 @@ class AdminArticleController extends Controller
                     $article->a_active = $article->a_active == 1 ? 0 :1;
                     $article->save();
                     return redirect()->back()->with('success','Cập nhật thành công');
-                    break;             
+                    break;
             }
         }
     }
