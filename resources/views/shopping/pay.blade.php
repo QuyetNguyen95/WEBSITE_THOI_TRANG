@@ -16,6 +16,15 @@
     </div>
 </div>
 <!-- breadcrumb-area end -->
+{{-- Step Progress bar  --}}
+<div class="container1">
+    <ul class="progressbar">
+        <li class="active">Đăng nhập</li>
+        <li class="active">Giỏ hàng</li>
+        <li class="active">Nhập địa chỉ & thanh toán</li>
+</ul>
+</div>
+ {{-- Step Progress bar  --}}
 <!-- checkout-area start -->
 <div class="checkout-area" style="margin-bottom: 100px;">
     <div class="container">

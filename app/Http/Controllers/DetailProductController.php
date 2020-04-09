@@ -11,6 +11,7 @@ use App\Models\ReplyComment;
 
 class DetailProductController extends FrontendController
 {
+
     public function __construct()
 	{
 		parent::__construct();

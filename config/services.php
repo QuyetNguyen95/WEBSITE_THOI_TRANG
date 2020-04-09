@@ -35,4 +35,9 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'google' => [
+        'client_id' => '622590158795-gk114am8lgpsb2iukl5s7ebakfn5avvu.apps.googleusercontent.com',
+        'client_secret' => 'q3bKefnbC1iio3rKC2p1Zwbr',
+        'redirect' => 'http://giakhiem56.com/google/callback',
+    ],
 ];

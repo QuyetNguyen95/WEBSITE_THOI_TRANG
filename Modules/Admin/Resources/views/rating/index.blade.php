@@ -40,7 +40,7 @@
                             @foreach($listRating as $singleRating)
                             <tr>
                                 <td>{{$stt}}</td>
-                                <td style="width: 190px">{{$singleRating->user->name}}</td>
+                                <td style="width: 190px">{{isset($singleRating->user->name) ? $singleRating->user->name : 'N/A'}}</td>
                                 <td style="width: 200px">{{$singleRating->product->pro_name}}</td>
                                 <td>{{$singleRating->ra_content}}</td>
                                 <td>{{$singleRating->ra_number}}</td>

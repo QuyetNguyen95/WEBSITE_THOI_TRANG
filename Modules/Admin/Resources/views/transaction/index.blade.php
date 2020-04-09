@@ -43,7 +43,7 @@
                               @foreach($transactions as $transaction)
                                 <tr>
                                   <td>{{$stt}}</td>
-                                  <td style="width: 190px">{{$transaction->user->name}}</td>
+                                  <td style="width: 190px">{{isset($transaction->user->name) ? $transaction->user->name : 'N/A'}}</td>
                                   <td style="width: 200px">{{$transaction->tr_address}}</td>
                                   <td>{{$transaction->tr_phone}}</td>
                                   <td>{{number_format($transaction->tr_total,0,'','.')}} VNĐ</td>

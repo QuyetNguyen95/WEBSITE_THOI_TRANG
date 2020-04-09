@@ -122,7 +122,7 @@
                     @foreach ($transactions as $transaction)
                     <tr>
                         <td>{{$stt}}</td>
-                        <td>{{$transaction->user->name}}</td>
+                        <td>{{isset($transaction->user->name) ? $transaction->user->name : 'N/A' }}</td>
                         <td>{{$transaction->tr_phone}}</td>
                         <td>{{$transaction->tr_address}}</td>
                         <td>{{$transaction->tr_total}}</td>

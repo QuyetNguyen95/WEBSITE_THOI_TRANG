@@ -18,7 +18,7 @@
         <div class="row" style="margin-bottom: 40px;">
             <div class="col-md-12" style="display: flex">
                     <h2 class="title-1">Quản lý danh mục </h2>
-                    <h2><a href="{{route('admin.get.create.category')}}"><i class="mdi mdi-library-plus" style="margin-left: 700px"></i></a></h2>
+                    <h2 style="margin-left: 700px"><a href="{{route('admin.get.create.category')}}"><i class="mdi mdi-library-plus" ></i></a></h2>
             </div>
         </div>
         <div class="row">

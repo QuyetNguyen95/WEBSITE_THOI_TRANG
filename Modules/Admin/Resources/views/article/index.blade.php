@@ -19,7 +19,7 @@
             <div class="row" style="margin-bottom: 40px;">
                 <div class="col-md-12" style="display: flex">
                         <h2 class="title-1">Quản lý bài viết </h2>
-                        <h2><a href="{{route('admin.get.create.article')}}"><i class="mdi mdi-library-plus" style="margin-left: 700px"></i></a></h2>
+                        <h2 style="margin-left: 700px"><a href="{{route('admin.get.create.article')}}"><i class="mdi mdi-library-plus" ></i></a></h2>
                 </div>
             </div>
             </div>
@@ -27,7 +27,7 @@
               <div class="col-md-12">
                  <form class="form-inline" >
                 <div class="form-group" style="margin-right: 10px">
-                  <input type="text" class="form-control"  placeholder="Tên sản phẩm" name="name" value="{{Request::get('name')}}">
+                  <input type="text" class="form-control"  placeholder="Tên sản phẩm" name="name" value="{{Request::get('name')}}" id="myInput">
                 </div>
                 <button type="submit" class="btn btn-sm btn-outline-info"><i class="mdi mdi-magnify"></i></button>
               </form>
@@ -39,7 +39,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th style="width: 150px">Tên bài viết</th>
+                            <th style="width: 150px" >Tên bài viết</th>
                             <th>Hình ảnh</th>
                             <th style="width: 150px">Mô tả</th>
                             <th>Tác giả</th>
@@ -49,7 +49,7 @@
                             <th>Thao tác</th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="myTable">
                           <?php $stt = 1; ?>
                             @if(isset($articles))
                               @foreach($articles as $article)
@@ -88,4 +88,16 @@
     </div>
     <div>{{$articles->links()}}</div>
 </div>
+@endsection
+@section('script')
+<script>
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+    </script>
 @endsection

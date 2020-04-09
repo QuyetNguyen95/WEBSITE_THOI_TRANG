@@ -17,7 +17,6 @@ class CategoryController extends FrontendController
 	}
     public function getListProduct(Request $request)
     {
-
         //show danh sách các loại sản phẩm
     	//show product of category
     	$getCategorySingle = preg_split('/(-)/i',$request->segment(2));
@@ -76,30 +75,9 @@ class CategoryController extends FrontendController
     		}
 		}
         //lọc sản phẩm theo giá cả
-        if($request->price)
+        if($request->min_price && $request->max_price)
         {
-            $price = $request->price;
-            switch ($price) {
-                case '1':
-                    $listProduct = $listProduct->where('pro_price','<',100000);
-                    break;
-
-                case '2':
-                    $listProduct = $listProduct->whereBetween('pro_price',[100000,300000]);
-                    break;
-                case '3':
-                    $listProduct = $listProduct->whereBetween('pro_price',[300000,500000]);
-                    break;
-                case '4':
-                    $listProduct = $listProduct->whereBetween('pro_price',[500000,700000]);
-                    break;
-                case '5':
-                    $listProduct = $listProduct->whereBetween('pro_price',[700000,1000000]);
-                    break;
-                case '6':
-                    $listProduct = $listProduct->where('pro_price','>',1000000);
-                    break;
-            }
+            $listProduct = $listProduct->whereBetween('pro_price',[$request->min_price,$request->max_price]);
          }
 
          //lọc sản phẩm theo size

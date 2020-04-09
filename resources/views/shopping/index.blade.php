@@ -29,6 +29,15 @@
         </div>
     </div>
 </div>
+ {{-- Step Progress bar  --}}
+<div class="container1">
+    <ul class="progressbar">
+        <li class="active">Đăng nhập</li>
+        <li>Giỏ hàng</li>
+        <li>Nhập địa chỉ & thanh toán</li>
+</ul>
+</div>
+ {{-- Step Progress bar  --}}
 <!-- cart-main-area start -->
 @if (Cart::count() > 0)
 <div class="cart-main-area">

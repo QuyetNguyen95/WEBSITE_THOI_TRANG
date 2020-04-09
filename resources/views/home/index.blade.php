@@ -707,7 +707,7 @@
 
         //		var endTime = new Date("29 April 2018 9:56:00 GMT+01:00");
         //ngày kết thúc
-        var endTime = new Date("15 April 2020 00:00:00  UTC+7:00");
+        var endTime = new Date("15 june 2020 00:00:00  UTC+7:00");
 
         endTime = (Date.parse(endTime) / 1000);
        //Phương thức date parse() trong JavaScript Phân tích một biểu diễn chuỗi

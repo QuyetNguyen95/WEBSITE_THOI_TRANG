@@ -55,30 +55,35 @@
                         @endif
                     </ul>
                  </div>
-                 <!--  product type end -->
                <!--  product price range start -->
-               <div class="shop-filter shop-space">
-                  <h2 class="shop-sidebar-title"><span>Khoảng giá</span></h2>
-                  <div class="info_widget">
-                     <div class="filter-price">
-                         <ul>
-                             <li><a style="color: {{Request::get('price') == 1 ? 'red' : ''}} ;font-size: 17px;font-weight: 600;"
-                                href="{{request()->fullUrlWithQuery(['price' => 1])}}">Dưới 100k</a></li>
-                             <li><a style="color: {{Request::get('price') == 2 ? 'red' : ''}} ;font-size: 17px;font-weight: 600;"
-                                 href="{{request()->fullUrlWithQuery(['price' => 2])}}">Từ 100k-300k</a></li>
-                             <li><a style="color: {{Request::get('price') == 3 ? 'red' : ''}} ;font-size: 17px;font-weight: 600;"
-                                 href="{{request()->fullUrlWithQuery(['price' => 3])}}">Từ 300k-500k</a></li>
-                             <li><a style="color: {{Request::get('price') == 4 ? 'red' : ''}} ;font-size: 17px;font-weight: 600;"
-                                 href="{{request()->fullUrlWithQuery(['price' => 4])}}">Từ 500k-700k</a></li>
-                            <li><a  style="color: {{Request::get('price') == 5 ? 'red' : ''}} ;font-size: 17px;font-weight: 600;"
-                                 href="{{request()->fullUrlWithQuery(['price' => 5])}}">Từ  700k-1000k</a></li>
-                            <li><a  style="color: {{Request::get('price') == 6 ? 'red' : ''}} ;font-size: 17px;font-weight: 600;"
-                                 href="{{request()->fullUrlWithQuery(['price' => 6])}}">Trên 1000k</a></li>
-                         </ul>
-                     </div>
-                  </div>
-               </div>
-               <!-- product price range end -->
+               <form action="">
+                  <div class="shop-filter shop-space">
+                     <h2 class="shop-sidebar-title"><span>Lọc theo giá sản phẩm</span></h2>
+                     <div class="info_widget" style="margin-top: 60px;">
+                         <div class="price_filter">
+                            <div class="" style="position: relative; bottom: 14px; right: -37px;">
+                                Giá <span class="from">{{Request::get('min_price') !== NULL ? Request::get('min_price') : 50000}}đ</span> —
+                                <span class="to">{{Request::get('max_price') !== NULL ? Request::get('max_price') : 1000000}}đ</span>
+                            </div>
+                             <div id="slider-range1" style="width: 91%;margin-left: 10px;" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+                                <div class="ui-slider-range ui-widget-header ui-corner-all" ></div>
+                                <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0" style="left: 50%;"></span>
+                                <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0" style="left: 83.3333%;"></span></div>
+                             <div class="price_slider_amount">
+                                 <input type="text" id="min_price" name="min_price" value="{{Request::get('min_price') !== NULL ? Request::get('min_price') : 50000}}"
+                                  data-min="{{Request::get('min_price') !== NULL ? Request::get('min_price') : 50000}}"
+                                  placeholder="Giá thấp nhất"" style="display: none">
+                                 <input type="text" id="max_price" name="max_price" value="{{Request::get('max_price') !== NULL ? Request::get('max_price') : 1000000}}"
+                                 data-max="{{Request::get('max_price') !== NULL ? Request::get('max_price') : 1000000}}"
+                                  placeholder="Giá cao nhất" style="display: none">
+                                  <input type="hidden" name="order" value="{{Request::get('order')}}">
+                                 <button type="submit" class="btn" style="width: 73px; margin-left: 32%;background-color: #83cbdc; color: white;">Lọc</button>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+               </form>
+             <!-- product price range end -->
                <!-- product size start -->
                <div class="shop-categories shop-space">
                   <h2 class="shop-sidebar-title"><span>Size</span></h2>
@@ -145,7 +150,7 @@
                   @endif
                </div>
                <!-- shop-featured end -->
-            </div>
+             </div>
             <!-- sidebar end -->
             <div class="col-lg-9 col-md-9 col-sm-12">
                <div class="row">
@@ -170,6 +175,8 @@
                                    <option value="increment" {{Request::get('order') == 'increment' ? "selected = 'selected'" : ''}}>Thứ tự theo giá: thấp đến cao</option>
                                    <option value="decrement" {{Request::get('order') == 'decrement' ? "selected = 'selected'" : ''}}>Thứ tự theo giá: cao đến thấp</option>
                                  </select>
+                                 <input type="hidden" id="min_price" name="min_price" value="{{Request::get('min_price') !== NULL ? Request::get('min_price') : 50000}}" >
+                                 <input type="hidden" id="max_price" name="max_price" value="{{Request::get('max_price') !== NULL ? Request::get('max_price') : 1000000}}" >
                               </div>
                            </form>
                         </div>
@@ -179,7 +186,8 @@
                   <!-- shop-product-details start -->
                   <div class="shop-product-details">
                      <!-- single-features start -->
-                     @if(isset($listProduct))
+                     @if (count($listProduct) > 0)
+                        @if(isset($listProduct))
                         @foreach($listProduct as $singleProduct)
                            <div class="col-md-4 col-sm-4">
                               <div class="single-features">
@@ -189,9 +197,9 @@
                                  <div class="product-img">
                                     <a href="{{route('get.detail.product',[$singleProduct->pro_slug,$singleProduct->id])}}">
                                        <img class="first-img" src="{{pare_url_file($singleProduct->pro_avatar)}}"
-                                        alt="" style="width: 262px; height: 345px;" />
+                                          alt="" style="width: 262px; height: 345px;" />
                                        <img class="second-img" src="{{pare_url_file($singleProduct->pro_img)}}"
-                                        alt="" style="width: 262px; height: 345px;" />
+                                          alt="" style="width: 262px; height: 345px;" />
                                     </a>
                                     <a class="modal-view" href="{{route('get.quickView.product',$singleProduct->id)}}" >Quick View</a>
                                     <div class="action-buttons">
@@ -204,19 +212,19 @@
                                  <?php
                                     $averageRating = 0;
                                     if ($singleProduct->pro_total_rating > 0) {
-                                        $averageRating = $singleProduct->pro_total_number/$singleProduct->pro_total_rating;
+                                          $averageRating = $singleProduct->pro_total_number/$singleProduct->pro_total_rating;
                                     }
 
-                                ?>
+                                 ?>
                                  <div class="product-content">
                                     <div class="pro-rating">
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <a href="#"><i class="fa {{$i<=$averageRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
-                                        @endfor
+                                          @for ($i = 1; $i <= 5; $i++)
+                                             <a href="#"><i class="fa {{$i<=$averageRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                                          @endfor
                                     </div>
                                     <h5><a href="{{route('get.detail.product',[$singleProduct->pro_slug,$singleProduct->id])}}"
-                                        style="text-overflow: ellipsis; overflow: hidden;white-space: nowrap;">
-                                        {{$singleProduct->pro_name}}</a></h5>
+                                          style="text-overflow: ellipsis; overflow: hidden;white-space: nowrap;">
+                                          {{$singleProduct->pro_name}}</a></h5>
                                     @if($singleProduct->pro_sale > 0)
                                        <span class="old-price">{{number_format($singleProduct->pro_price,0,'','.')}} đ</span>
                                        <span class="pro-price">{{get_cal_sale($singleProduct->pro_price,$singleProduct->pro_sale)}} đ</span>
@@ -228,8 +236,9 @@
                            </div>
                         @endforeach
                         @endif
-
-
+                     @else
+                           <h4 style="margin-left: 16px;">Không có sản phẩm nào phù hợp với lựa chọn.</h4>
+                     @endif
                      <!-- single-features end -->
                   </div>
                   <!-- shop-product-details end -->
@@ -300,5 +309,30 @@
             //tra ve ?orderby=desc, ?orderby=asc ....
          })
       })
+
+
+
+      //filter price
+
+    $(function() {
+        //lấy min price từ request get
+        let min_price =  $( "#min_price" ).attr('data-min');
+        //lấy max price từ request get
+        let max_price =  $( "#max_price" ).attr('data-max');
+        $( "#slider-range1" ).slider({
+        range: true,
+        min: 50000,
+        max: 1000000,
+        values: [ parseInt(min_price),parseInt(max_price)],
+        slide: function( event, ui ) {
+        //set price input
+        $( "#min_price" ).val(ui.values[ 0 ]);
+        $( "#max_price" ).val(ui.values[ 1 ]);
+        //set price text
+        $( ".from" ).text(ui.values[ 0 ] + 'đ');
+        $( ".to" ).text(ui.values[ 1 ] + 'đ');
+        }
+        });
+    });
    </script>
 @stop

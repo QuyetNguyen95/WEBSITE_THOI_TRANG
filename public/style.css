@@ -3167,12 +3167,12 @@ padding-top: 5px;}
   margin-left: auto;
 }
 .price_filter .ui-slider-handle.ui-state-default.ui-corner-all {
-background: #fff none repeat scroll 0 0;
-border: 3px solid #83cbdc;
-border-radius: 50%;
-height: 21px;
-margin-top: -2px;
-width: 21px;
+background: #fff none repeat scroll 0 0 !important;
+border: 3px solid #83cbdc !important;
+border-radius: 50% !important;
+height: 21px !important;
+margin-top: -2px !important;
+width: 21px !important;
 }
 .price_filter .ui-slider-range {
   background: #83cbdc none repeat scroll 0 0 !important;
