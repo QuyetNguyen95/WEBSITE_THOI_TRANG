@@ -95,6 +95,10 @@ Route::group(['prefix' => 'admin','middleware'=> 'CheckLoginAdmin'], function ()
         Route::post('/info','AdminInformationController@saveInfo');
         Route::get('/pass','AdminInformationController@updatePass')->name('get.pass.admin');
         Route::post('/pass','AdminInformationController@savePass');
+        Route::get('/showListStaff','AdminInformationController@showStaff')->name('get.show.list.staff');
+        Route::get('{action}/{id}','AdminInformationController@action')->name('admin.get.action.staff');
+        Route::get('/addStaff','AdminInformationController@addStaff')->name('get.add.staff');
+        Route::post('/addStaff','AdminInformationController@postStaff');
     });
 
     //quản lý kho hàng

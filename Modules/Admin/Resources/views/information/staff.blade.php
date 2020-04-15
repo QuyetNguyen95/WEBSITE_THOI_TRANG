@@ -10,7 +10,7 @@
                         <a href="{{route('admin.dashboard')}}">Trang chủ</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{{route('admin.get.list.user')}}">Thành viên</a>
+                        <a href="{{route('admin.get.list.user')}}">Nhân viên</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">Danh sách</li>
                     </ol>
@@ -28,10 +28,9 @@
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>Tên thành viên</th>
+                            <th>Tên nhân viên</th>
                             <th>Email</th>
                             <th>Phone</th>
-                            <th>Điểm thưởng</th>
                             <th>Hình ảnh</th>
                             <th>Thao tác</th>
                           </tr>
@@ -45,13 +44,12 @@
                                 <td>{{$user->name}}</td>
                                 <td>{{$user->email}}</td>
                                 <td>{{$user->phone}}</td>
-                                <td style="padding-left: 50px;">{{$user->total_pay}}</td>
                                 <td>
                                     <img src="{{pare_url_file($user->avatar)}}" alt="" style="width: 60px; height: 60px;">
                                 </td>
                                 <td>
                                     <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
-                                        <a href="{{route('admin.get.action.user',['delete',$user->id])}}"> <i class="text-info mdi mdi-delete"></i></a>
+                                        <a href="{{route('admin.get.action.staff',['delete',$user->id])}}"> <i class="text-info mdi mdi-delete"></i></a>
                                     </button>
                                 </td>
                               </tr>

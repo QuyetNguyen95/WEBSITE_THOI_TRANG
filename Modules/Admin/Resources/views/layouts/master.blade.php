@@ -122,12 +122,14 @@
               <i class="mdi mdi-briefcase link-icon"></i>
             </a>
           </li>
+          @if (Auth::guard('admins')->user()->role == 1)
           <li class="{{\Request::url() == 'admin.get.list.rating' ? 'active' : ''}}">
             <a href="{{route('admin.get.list.rating')}}">
               <span class="link-title">Đánh giá</span>
               <i class="mdi mdi-heart link-icon"></i>
             </a>
           </li>
+          @endif
           <li class="{{\Request::url() == 'admin.get.list.article' ? 'active' : ''}}">
             <a href="{{route('admin.get.list.article')}}">
               <span class="link-title">Tin tức</span>
@@ -140,18 +142,30 @@
               <i class="mdi mdi-cart link-icon"></i>
             </a>
           </li>
+          @if (Auth::guard('admins')->user()->role == 1)
           <li class="{{\Request::url() == 'admin.get.list.warehouse' ? 'active' : ''}}">
             <a href="{{route('admin.get.list.warehouse')}}">
               <span class="link-title">Kho hàng</span>
               <i class="mdi mdi-home-map-marker link-icon"></i>
             </a>
           </li>
+          @endif
+          @if (Auth::guard('admins')->user()->role == 1)
+          <li class="{{\Request::url() == 'get.show.list.staff' ? 'active' : ''}}">
+            <a href="{{route('get.show.list.staff')}}">
+              <span class="link-title">Nhân viên</span>
+              <i class="mdi mdi mdi-account link-icon"></i>
+            </a>
+          </li>
+          @endif
+          @if (Auth::guard('admins')->user()->role == 1)
           <li class="{{\Request::url() == 'admin.get.list.user' ? 'active' : ''}}">
             <a href="{{route('admin.get.list.user')}}">
               <span class="link-title">Thành viên</span>
               <i class="mdi mdi-account-multiple-outline link-icon"></i>
             </a>
           </li>
+          @endif
           <li class="{{\Request::url() == 'admin.get.list.static' ? 'active' : ''}}">
             <a href="{{route('admin.get.list.static')}}">
               <span class="link-title">Page tĩnh</span>
