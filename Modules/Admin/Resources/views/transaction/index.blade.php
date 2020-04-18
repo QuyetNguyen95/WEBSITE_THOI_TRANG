@@ -30,7 +30,7 @@
                             <th>#</th>
                             <th>Tên kháng hàng</th>
                             <th>Địa chỉ</th>
-                            <th>Số điện thoại</th>
+                            <th style="width: 114px">Số điện thoại</th>
                             <th>Tổng tiền</th>
                             <th>Trạng thái</th>
                             <th>Time</th>
@@ -55,12 +55,15 @@
                                     @endif
                                   </td>
                                   <td>{{$transaction->created_at}}</td>
-                                  <td>
+                                  <td style="padding-left: 0px;">
                                     <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
                                         <a href="{{route('admin.get.action.transaction',['delete',$transaction->id])}}"> <i class="text-info mdi mdi-delete"></i></a>
                                     </button>
                                     <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
                                         <a href="{{route('admin.get.view.transaction',$transaction->id)}}"> <i class="text-info mdi mdi-eye"></i></a>
+                                    </button>
+                                    <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
+                                        <a href="{{route('admin.generate-pdf',$transaction->id)}}"> <i class="text-info mdi mdi mdi-export"></i></a>
                                     </button>
                                   </td>
                                 </tr>

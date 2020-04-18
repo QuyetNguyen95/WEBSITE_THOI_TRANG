@@ -1,4 +1,4 @@
-@extends('admin::layouts.master')
+@extends('user.main')
 @section('content')
 <div class="main-content">
     <div class="section__content section__content--p30">
@@ -6,10 +6,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb has-arrow">
                 <li class="breadcrumb-item">
-                    <a href="{{route('admin.dashboard')}}">Trang chủ</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a href="{{route('admin.get.list.transaction')}}">Đơn hàng</a>
+                    <a href="{{route('get.index.user')}}">Trang chủ</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">Chi tiết đơn hàng</li>
                 </ol>
@@ -27,7 +24,6 @@
                <th>Giá sale</th>
                <th>Số lượng</th>
                <th>Thành tiền</th>
-               <th>Thao Tác</th>
              </tr>
            </thead>
            <tbody>
@@ -46,14 +42,9 @@
                    <img src="{{isset($order->product->pro_avatar) ? pare_url_file($order->product->pro_avatar) : ''}}" style="width: 60px; height: 70px;" alt="">
                </td>
                <td>{{number_format($order->or_price,0,',','.')}} đ</td>
-               <td>{{number_format($order->or_price*(1-$order->product->pro_sale/100),0,',','.')}} đ ({{$order->product->pro_sale}}%)</td>
-               <td style="padding-left: 33px;">{{$order->or_qty}}/{{$order->product->pro_number}}</td>
+               <td>{{number_format($order->or_price*(1-$order->product->pro_sale/100),0,',','.')}} đ</td>
+               <td style="padding-left: 33px;">{{$order->or_qty}}</td>
                <td>{{number_format($order->or_price*(1-$order->product->pro_sale/100)*$order->or_qty,0,',','.')}}đ</td>
-               <td>
-                   <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
-                       <a href="{{route('admin.get.delete.order',$order->id)}}"> <i class="text-info mdi mdi-delete"></i></a>
-                   </button>
-               </td>
              </tr>
             <?php $i++; ?>
                @endforeach

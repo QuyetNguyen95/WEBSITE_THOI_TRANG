@@ -36,8 +36,8 @@ return [
     ],
 
     'google' => [
-        'client_id' => '622590158795-gk114am8lgpsb2iukl5s7ebakfn5avvu.apps.googleusercontent.com',
-        'client_secret' => 'q3bKefnbC1iio3rKC2p1Zwbr',
-        'redirect' => 'http://giakhiem56.com/google/callback',
+        'client_id' => '622590158795-07gc2dtd1ka9tqntu83pkgdkthtrp07u.apps.googleusercontent.com',
+        'client_secret' => 'eptVB3kQ0rue5ZjgJB4z4sLH',
+        'redirect' => 'http://orianna.com/google/callback',
     ],
 ];

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class AdminTransactionController extends AdminHeaderController
 {
@@ -72,5 +73,21 @@ class AdminTransactionController extends AdminHeaderController
     {
         $orders = Order::with("product")->where("or_transaction_id",$id)->get();//lay du lieu cua chi tiet don hang
         return  view('admin::components.order',compact('orders'));
+    }
+
+ // Xuất đơn hàng ra dạng pdf
+    public function pdfview(Request $request,$id)
+    {
+       //lấy thông tin khách hàng
+       $transaction = Transaction::with('user:id,name')->find($id);
+       //lấy thông tin đơn hàng
+       $orders = Order::where('or_transaction_id',$id)->paginate(10);
+       $data =
+       [
+            'orders'       => $orders,
+            'transaction' => $transaction
+       ];
+      $pdf = PDF::loadView('admin::transaction.export_pdf',$data);
+      return $pdf->download('nguyencuongquyet_admin.pdf');
     }
 }

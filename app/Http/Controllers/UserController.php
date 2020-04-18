@@ -6,6 +6,7 @@ use App\User;
 use App\Models\Order;
 use App\Models\Rating;
 use App\Models\Product;
+use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -112,10 +113,29 @@ class UserController extends FrontendController
             return response()->json($html);
         }
     }
-
+    // hiển thị các sản phẩm bán chạy
     public function bestSellingProduct()
     {
         $bestSellProducts = Product::where('pro_pay','>',0)->orderBy('pro_pay','desc')->paginate(10);
         return view('user.best_selling_product',compact('bestSellProducts'));
+    }
+
+    //hiển thị chi tiết đơn hàng
+    public function showDetailOrder($id)
+    {
+        $orders = Order::where('or_transaction_id',$id)->paginate(10);
+        return view('user.show_detail_order',compact('orders'));
+    }
+
+    //xuất đơn hàng ra dạng pdf
+    public function pdfview(Request $request,$id)
+    {
+       $orders = Order::where('or_transaction_id',$id)->paginate(10);
+       $data =
+       [
+            'orders' => $orders
+       ];
+      $pdf = PDF::loadView('user.export_pdf',$data);
+      return $pdf->download('nguyencuongquyet.pdf');
     }
 }

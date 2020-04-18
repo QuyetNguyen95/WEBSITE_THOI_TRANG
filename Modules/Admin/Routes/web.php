@@ -85,6 +85,7 @@ Route::group(['prefix' => 'admin','middleware'=> 'CheckLoginAdmin'], function ()
     Route::group(['prefix' => 'transaction'], function() {
         Route::get('/','AdminTransactionController@index')->name('admin.get.list.transaction');
         Route::get('view/{id}','AdminTransactionController@viewOrder')->name('admin.get.view.transaction');
+        Route::get('generate-pdf/{id}', 'AdminTransactionController@pdfview')->name('admin.generate-pdf');
         Route::get('order/{id}','AdminTransactionController@deleteOrder')->name('admin.get.delete.order');
         Route::get('transaction/{action}/{id}','AdminTransactionController@action')->name('admin.get.action.transaction');
     });

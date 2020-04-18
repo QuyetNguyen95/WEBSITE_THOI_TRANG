@@ -23,9 +23,10 @@ Route::get('san-pham/{slug}-{id}','DetailProductController@index')->name('get.de
 Route::get('/bai-viet','ArticleController@getListArticle')->name('get.list.article');
 Route::get('/bai-viet/{slug}-{id}','ArticleController@getDetailArticle')->name('get.detail.article');
 
-  //dang nhap bang facebook
+  //dang nhap bang google
   Route::get('google/callback','GoogleController@handleProviderCallback');
   Route::get('google/login','GoogleController@redirectProvider')->name('google.login');
+
 
 Route::group(['namespace' => 'auth'], function() {
 	//dang ky
@@ -85,6 +86,8 @@ Route::group(['prefix' => 'user','middleware'=> 'CheckLoginUser'], function() {
     Route::get('/watch','UserController@justWatch')->name('get.just.watch.user');
     Route::post('/watch','UserController@viewjustWatch')->name('get.view.just.watch.user');
     Route::get('/bestSell','UserController@bestSellingProduct')->name('get.best.sell.user');
+    Route::get('/showDetailOrder/{id}','UserController@showDetailOrder')->name('get.show.detail.order.user');
+    Route::get('generate-pdf/{id}', 'UserController@pdfview')->name('generate-pdf');
 });
 
 

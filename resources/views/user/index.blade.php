@@ -77,6 +77,8 @@
                 <th>Số điện thoại</th>
                 <th>Tổng tiền</th>
                 <th>Trạng thái</th>
+                <th>Chi tiết đơn hàng</th>
+                <th>Xuất pdf</th>
                 <th>Thời gian</th>
             </tr>
             </thead>
@@ -96,6 +98,15 @@
                           <a href="#" class="btn btn-xs btn-default">Chờ xử lý</a>
                         @endif
                       </td>
+                      <td style="padding-left: 40px;">
+                          <a href="{{route('get.show.detail.order.user',$transaction->id)}}">Chi tiết</a>
+                      </td>
+                      <td>
+                        <a href="{{route('generate-pdf',$transaction->id)}}">
+                            <div class="btn btn-xs btn-warning has-icon">
+                                <i class="mdi mdi mdi-export"></i>Xuất</div>
+                            </td>
+                        </a>
                       <td>{{$transaction->created_at}}</td>
                     </tr>
                     <?php $stt++; ?>
