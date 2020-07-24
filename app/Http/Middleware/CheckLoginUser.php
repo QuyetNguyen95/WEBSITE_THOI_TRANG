@@ -10,7 +10,7 @@ class CheckLoginUser
     {
         if(!get_data_user('web'))
         {
-            return redirect()->route('get.login')->with('alert','Xin hãy đăng nhập trước khi thanh toán');
+            return redirect()->route('get.login')->with('alert','Bạn cần đăng nhập để sử dụng chức năng này');
         }
         return $next($request);
     }

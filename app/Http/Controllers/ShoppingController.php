@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use App\Mail\ProductInformation;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\FrontendController;
-
+use Illuminate\Support\Facades\Auth;
 class ShoppingController extends FrontendController
 {
     public function __construct()
@@ -37,22 +37,16 @@ class ShoppingController extends FrontendController
                 return redirect()->back()->with('warning','Số lượng vượt quá số lượng trong kho ');
             }
             //kiểm tra số lượng sản phẩm so với yêu cầu
-            if($request->qty > 5-$productCart->qty)
-            {
-                return redirect()->back()->with('warning','Số lượng tối đã được mua là 5 sản phẩm cho mỗi loại');
-            }
+            // if($request->qty > 5-$productCart->qty)
+            // {
+            //     return redirect()->back()->with('warning','Số lượng tối đã được mua là 5 sản phẩm cho mỗi loại');
+            // }
            }
         }
-
-
         //lấy thông tin của sản phẩm qua id
-
 		if (!$product->id) {
 			return redirect('/');
         }
-
-
-
         //lấy size sản phẩm qua request
         if ($request->size) {
             $size = $request->size;
@@ -67,7 +61,7 @@ class ShoppingController extends FrontendController
             $color = 'N/A' ;
         }
         //lấy số lượng sản phẩm từ input so sánh với qty trong database
-        if($request->qty <= 5) {
+        // if($request->qty <= 5) {
 
             if ($product->pro_number>=$request->qty) {
                 if($request->qty)
@@ -98,9 +92,9 @@ class ShoppingController extends FrontendController
             }
             return redirect()->back()->with('warning','Số lượng vượt quá số lượng trong kho');
         }
-        return redirect()->back()->with('warning','Số lượng tối đã được mua là 5 sản phẩm cho mỗi loại');
+    //     return redirect()->back()->with('warning','Số lượng tối đã được mua là 5 sản phẩm cho mỗi loại');
 
-	}
+	// }
 
 	//show san pham ra gio hang
 
@@ -134,6 +128,23 @@ class ShoppingController extends FrontendController
         }
 	}
 
+
+    //phần sản phẩm mua sau
+    public function buyAfter(Request $request,$rowId,$id)
+    {
+        try {
+            \DB::table('buy_after')->insert([
+                'ba_product_id' => $id,
+                'ba_user_id'    => Auth::user()->id,
+                'created_at'    => Carbon::now(),
+                'updated_at'    => Carbon::now()
+            ]);
+        } catch (\Exception $e) {
+
+        }
+        Cart::remove($request->rowId);
+        return redirect()->back()->with('success', 'Đã thêm sản phẩm vào mục mua sau!');;
+    }
 	//phần cập nhật số lượng giỏ hàng
 	public function quantity(Request $request)
 	{
@@ -143,7 +154,8 @@ class ShoppingController extends FrontendController
 
             return response()->json(["code" => 1]);
         }
-	}
+    }
+
 
 	//lua don hang va chi tiet don hang vao database
 
@@ -169,8 +181,6 @@ class ShoppingController extends FrontendController
 					'or_transaction_id' => $idTransaction,
 					'or_product_id'     =>$product->id,
 					'or_qty'            => $product->qty,
-					'or_price'          => $product->options->price_old,
-                    'or_sale'           => $product->options->sale,
                     'or_color'          => $product->options->color,
                     'or_size'           => $product->options->size,
 					'created_at'        => Carbon::now(),

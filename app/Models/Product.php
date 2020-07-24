@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -16,12 +17,12 @@ class Product extends Model
 
     protected $status = [
     	1 => [
-    		'name'  => 'Public',
+    		'name'  => 'Hiển thị',
     		'class' => 'btn-danger'
     	],
 
     	0 => [
-    		'name'  => 'Private',
+    		'name'  => 'Không',
     		'class' => 'btn-default'
     	]
     ];
@@ -39,7 +40,7 @@ class Product extends Model
     ];
     public function getStatus()
     {
-    	return array_get($this->status,$this->pro_active);
+    	return array_get($this->status,$this->pro_active);// lấy dữ liệu của mảng bởi key
     }
 
     public function getHot()
@@ -49,5 +50,23 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class,'pro_category_id');
+        //một sản phẩm thuộc một danh mục
+    }
+    public function favourite()
+    {
+        return $this->belongsToMany(User::class,'user_favourite','uf_product_id','uf_user_id');
+        //một user có thể yêu thích nhiều sản phẩm thông qua bảng trung gian user_favourite
+    }
+
+    public function viewed()
+    {
+        return $this->belongsToMany(User::class,'viewed_product','vp_product_id','vp_user_id');
+        //một user có thể xem nhiều sản phẩm thông qua bảng trung gian viewed_product
+    }
+
+    public function buyafter()
+    {
+        return $this->belongsToMany(User::class,'buy_after','ba_product_id','ba_user_id');
+        //một user có thể mua sau nhiều sản phẩm thông qua bảng trung gian buy_after
     }
 }

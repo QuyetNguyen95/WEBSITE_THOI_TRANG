@@ -69,6 +69,7 @@
         <p class="card-title ml-n1">Danh sách đơn hàng của bạn</p>
         </div>
         <div class="table-responsive">
+        @if ($transactions->count() > 0)
         <table class="table table-hover table-sm">
             <thead>
             <tr class="solid-header">
@@ -114,6 +115,15 @@
                 @endif
             </tbody>
         </table>
+        @else
+            <div style="margin-left: 35%; margin-top: 32px;margin-bottom: 50px;">
+                <img style="margin-bottom: 20px;" src="{{asset('img/download.png')}}" alt="">
+                <p style="margin-bottom: 20px">Bạn chưa có đơn hàng nào</p>
+                <a href="{{route('home')}}" style="padding: 11px;">
+                <button type="button" class="btn btn-success">Tiếp tục mua sắp</button>
+                </a>
+            </div>
+        @endif
         </div>
     </div>
     </div>

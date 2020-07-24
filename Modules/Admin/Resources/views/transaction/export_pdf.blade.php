@@ -26,12 +26,15 @@
 </head>
 <body>
     <div class="head">
-    <span style="margin-left: 70%">Mẫu số {{rand(1000000,9999999)}}</span>
+    <span>
+        <img class="logo" src="{{asset('img/logo/logo.png')}}"  style="width: 130px;margin-left: 80px;margin-top: 60px" alt="">
+    </span>
+    <span style="margin-left: 70%; ine-height: 1px;">Mẫu số {{rand(1000000,9999999)}}</span>
      <h3 style="margin: 0 auto;width: 26%;">HÓA ĐƠN BÁN HÀNG</h3>
-     <div style="margin-left: 70%">
+     <div style="margin-left: 37%">
         <p style="line-height: 1px;">Ký hiệu:...</p>
         <p style="line-height: 1px;">Số:...</p>
-        <p>Ngày...Tháng...Năm 2020</p>
+        <p style="line-height: 1px;">Ngày...Tháng...Năm 2020</p>
      </div>
      <div class="introduce" style="display: flex">
         <div class="left" style="margin-left: 15%">
@@ -77,10 +80,10 @@
                         <li>Size: {{$order->or_size}}</li>
                     </ul>
                 </td>
-                <td>{{number_format($order->or_price,0,',','.')}} đ</td>
-                <td>{{number_format($order->or_price*(1-$order->product->pro_sale/100),0,',','.')}} đ</td>
+                <td>{{number_format($order->product->pro_price,0,',','.')}} đ</td>
+                <td>{{number_format($order->product->pro_price*(1-$order->product->pro_sale/100),0,',','.')}} đ</td>
                 <td style="padding-left: 33px;">{{$order->or_qty}}</td>
-                <td>{{number_format($order->or_price*(1-$order->product->pro_sale/100)*$order->or_qty,0,',','.')}}đ</td>
+                <td>{{number_format($order->product->pro_price*(1-$order->product->pro_sale/100)*$order->or_qty,0,',','.')}}đ</td>
             </tr>
             <?php $i++; ?>
                 @endforeach

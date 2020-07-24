@@ -42,7 +42,7 @@
                             <div class="post-date ontop">
                                 <span class="day">{{$getSingleArticle->updated_at->format('d')}}</span>
                                 <span class="month">{{$getSingleArticle->updated_at->format('M')}}</span>
-                                <span class="blog-comments"><a href="#">3 comments</a></span>
+                                <span class="blog-comments"><a href="#">{{$getSingleArticle->a_view}} lượt xem</a></span>
                             </div>
                         </div>
                         <!-- post-thumbnail end -->

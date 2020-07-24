@@ -141,6 +141,7 @@ class CategoryController extends FrontendController
 
     	return view('product.index',$data);
     }
+    //lọc sản phẩm theo giá đổ sang view product/product_filter
     public function filterProduct(Request $request){
         if($request->ajax())
         {

@@ -10,7 +10,7 @@ class FrontendController extends Controller
 	//lấy tất cả các danh mục c_active bằng 1
     public function __construct()
     {
-    	$getCategoryList = Category::select('id','c_name','c_slug')->where('c_active',Category::HOME_PUBLIC)->get();
+    	$getCategoryList = Category::select('id','c_name','c_slug')->where('c_active',Category::STATUS_PUBLIC)->get();
     	view()->share('getCategoryList', $getCategoryList);
     }
 }

@@ -76,17 +76,36 @@
                                             src="{{pare_url_file($product->options->avatar)}}" alt="" /></a></td>
                                         <td class="product-price"><span class="amount">
                                             {{number_format($product->options->price_old,0,'','.')}} đ</span></td>
-                                        <td class="product-quantity"><input class="qty{{$product->id}}" type="number" value="{{$product->qty}}" min="1" name="quantity" />
+                                        <td class="product-quantity">
 
+                                            <div style="width: 122px; margin-left: 20px;">
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default btn-number{{$product->id}}"  data-type="minus" data-field="quant[2]{{$product->id}}">
+                                                          <span class="glyphicon glyphicon-minus"></span>
+                                                        </button>
+                                                    </span>
+
+                                                    <input style="height: 34px" type="text" name="quant[2]{{$product->id}}" class="form-control input-number qty{{$product->id}}" value="{{$product->qty}}" min="1" max="1000">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default btn-number{{$product->id}}" data-type="plus" data-field="quant[2]{{$product->id}}">
+                                                            <span class="glyphicon glyphicon-plus"></span>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </td>
                                         <td class="product-price"><span class="amount">{{$product->options->sale}} %</span></td>
-                                        <td class="product-subtotal"><span id="price{{$product->id}}" data-price="{{$product->price}}" class="loopTable">{{$product->price*$product->qty}}</span> đ</td>
+                                        <td class="product-subtotal"><span id="price{{$product->id}}" data-price="{{$product->price}}" class="loopTable">{{number_format($product->price*$product->qty,0,"",".")}}</span> đ</td>
                                         <td class="product-remove">
                                             <a href="{{route('quantity.products.shopping')}}" id="updateCart{{$product->id}}" data-rowId="{{$product->rowId}}" data-number="{{$product->options->number}}">
                                                 <i class="fa fa-refresh"></i>
                                             </a>
                                             <a href="{{route('delete.products.shopping')}}" class="deleteCart" data-rowId="{{$product->rowId}}">
                                                 <i class="fa fa-times"></i>
+                                            </a>
+                                            <a href="{{route('buyAfter.products.shopping',[$product->rowId,$product->id])}}">
+                                                <button type="button" class="btn btn-xs btn-success">Mua sau</button>
                                             </a>
                                         </td>
                                     </tr>
@@ -140,10 +159,10 @@
     </div>
 </div>
 @else
-<div style="margin-bottom: 500px;">
+<div style="margin-bottom: 650px;">
     <div class="col-md-12 col-sm-12">
         <div class="bg"  style="text-align: center;
-        margin-bottom: 25px; margin-top: 25px;"><img src="{{asset('img/cow.jfif')}}" alt=""></div>
+        margin-bottom: 25px; margin-top: 25px;"><img src="{{asset('img/download.png')}}" alt=""></div>
         <p style="text-align: center;">Không có sản phẩm nào trong giỏ hàng của bạn.</p>
         <div class="buttons-cart" style="margin-left: 570px;">
             <a href="{{route('home')}}" style="background: #919191;color: white;
@@ -178,16 +197,17 @@
                          //lấy giá của sản phẩm
                         let price = $('#price{{$product->id}}').attr('data-price');
                         let pro_number = $(this).attr('data-number');//string
-                        console.log(pro_number,qty);
                         if(qty > parseInt(pro_number))
                         {
-                            location.reload();
+
                             alert('Sản phẩm đã hết hàng');
-                        }else if(qty > 5)
-                        {
                             location.reload();
-                            alert('Bạn chỉ được mua tối đã 5 sản phẩm');
-                        }
+                        }//else if(qty > 5)
+                        // {
+
+                        //     alert('Bạn chỉ được mua tối đã 5 sản phẩm');
+                        //     location.reload();
+                        // }
                         else{
                              // tính lại giá của từng sản phẩm
                              $('#price{{$product->id}}').text(price*qty);
@@ -220,6 +240,32 @@
                             })
                         }
                     })
+
+                    //điều khiển button phần giỏ hàng
+                    $('.btn-number{{$product->id}}').click(function(e){
+                        e.preventDefault();
+
+                        fieldName = $(this).attr('data-field');
+                        type      = $(this).attr('data-type');
+                        var input = $("input[name='"+fieldName+"']");
+                        var currentVal = parseInt(input.val());
+                        if (!isNaN(currentVal)) {
+                            if(type == 'minus') {
+
+                                if(currentVal > input.attr('min')) {
+                                    input.val(currentVal - 1).change();
+                                }
+
+                            } else if(type == 'plus') {
+
+                                if(currentVal < input.attr('max')) {
+                                    input.val(currentVal + 1).change();
+                                }
+                            }
+                        } else {
+                            input.val(0);
+                        }
+                    });
                 @endforeach
 
                 //HÀM XÓA SẢN PHẨM TRONG GIỎ HÀNG

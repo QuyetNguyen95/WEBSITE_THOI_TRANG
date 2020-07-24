@@ -40,18 +40,18 @@
 				    <tbody>
 				    	<?php $i = 1; ?>
 				    	@foreach($products as $key => $product)
-				      <tr>
-				      	<td>#{{$i}}</td>
-				        <td><a href="">{{$product->name}}</a></td>
-				        <td>{{number_format($product->options->price_old,0,',','.')}}đ</td>
-				        <td class="text-center">
-			            	{!!$product->qty!!}
-			            </td>
-			          	<td>{{$product->options->sale}} %</td>
-				        <td>{{number_format(($product->price*$product->qty),0,',','.')}}đ</td>
-				      </tr>
-				     <?php $i++; ?>
-				    	@endforeach
+                          <tr>
+                            <td>#{{$i}}</td>
+                            <td><a href="">{{$product->name}}</a></td>
+                            <td>{{number_format($product->options->price_old,0,',','.')}}đ</td>
+                            <td class="text-center">
+                                {!!$product->qty!!}
+                            </td>
+                            <td>{{$product->options->sale}} %</td>
+                            <td>{{number_format(($product->price*$product->qty),0,',','.')}}đ</td>
+                          </tr>
+                         <?php $i++; ?>
+                            @endforeach
                     </tbody>
 			      </table>
       			<h5 class="pull-right" style="font-size: 15px;">Tổng giá trị đơn hàng :  {{ Cart::subtotal() }}</h5>
@@ -60,3 +60,4 @@
 	    </div>
 	</div>
 </body>
+

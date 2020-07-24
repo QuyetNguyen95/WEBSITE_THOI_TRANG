@@ -8,6 +8,8 @@ use Illuminate\Routing\Controller;
 use App\Http\Requests\RequestProduct;
 use App\Models\Product;
 use App\Models\Category;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ProductsImport;
 class AdminProductController extends AdminHeaderController
 {
 
@@ -19,6 +21,8 @@ class AdminProductController extends AdminHeaderController
     public function index(Request $request)
     {
         $products = Product::with('category:id,c_name');
+        if($request->name)
+        dd($request->name);
         if($request->name) $products = $products->where('pro_name','like','%'.$request->name.'%');
         if($request->category) $products = $products->where('pro_category_id',$request->category);//tim kiem theo pro_category_id(danh muc)
         $products = $products->orderByDesc('id')->paginate(10);
@@ -76,7 +80,7 @@ class AdminProductController extends AdminHeaderController
         $product->pro_category_id     = $requestProduct->pro_category_id;
         $product->pro_price           = $requestProduct->pro_price;
         $product->pro_sale            = $requestProduct->pro_sale;
-        $product->pro_number          = $requestProduct->pro_number;
+        $product->pro_number          = $product->pro_number += $requestProduct->pro_number;
         $product->pro_type            = $requestProduct->pro_type;
         $product->pro_size            = $requestProduct->pro_size;
         $product->pro_color           = $requestProduct->pro_color;
@@ -124,7 +128,16 @@ class AdminProductController extends AdminHeaderController
         }
 
     }
-
-
+    //thêm nhiều sản phẩm cùng một lúc
+    public function import(Request $request) 
+    {
+        if(!($request->product_file))
+        {
+            return redirect()->back()->with('danger', 'Làm ơn thêm file excel!!!');
+        }
+        
+        $import = Excel::import(new ProductsImport, request()->file('product_file'));
+        return redirect()->back()->with('success', 'Thêm thành công!!!');
+    }
 
 }

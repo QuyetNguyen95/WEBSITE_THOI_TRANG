@@ -28,7 +28,7 @@ class AdminUserController extends AdminHeaderController
    			switch ($action) {
    				case 'delete':
    					$deleteUser->delete();
-            return redirect()->back()->with('danger','Xóa sản phẩm thành công');
+            return redirect()->back()->with('danger','Xóa thành viên thành công');
    					break;
    			}
    		}

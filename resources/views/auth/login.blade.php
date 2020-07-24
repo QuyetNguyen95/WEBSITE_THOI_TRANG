@@ -21,7 +21,7 @@
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-default" style="color: #fffbfb; background-color: #83cbdc;border-color: #83cbdc; margin-right: 20px;">Đăng nhập</button>
-                                <a href="{{route('google.login')}}" style="color: #fffbfb;background-color: #df4a32;border-color: #83cbdc; margin-right: 20px; padding: 9px 28px;border-radius: 5px;">
+                                <a href="{{route('google.login',['social' => 'google'])}}" style="color: #fffbfb;background-color: #df4a32;border-color: #83cbdc; margin-right: 20px; padding: 9px 28px;border-radius: 5px;">
                                    <i class="fa fa-google"></i> Google
                                 </a>
                             </div>

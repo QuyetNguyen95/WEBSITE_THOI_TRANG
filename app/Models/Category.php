@@ -10,39 +10,27 @@ class Category extends Model
     protected $guarded = [''];
     const STATUS_PUBLIC = 1;
     const  STATUS_PRIVATE = 0;
-    const HOME_PUBLIC = 1;
-    const HOME_PRIVATE = 0;
 
     protected $status = [
     	1 => [
-    		'name'  => 'Public',
+    		'name'  => 'Hiển thị',
     		'class' => 'btn-danger'
     	],
 
     	0 => [
-    		'name'  => 'Private',
+    		'name'  => 'Không',
     		'class' => 'btn-default'
     	]
     ];
 
-    protected $home = [
-    	1 => [
-    		'name'  => 'Public',
-    		'class' => 'btn-info'
-    	],
-
-    	0 => [
-    		'name'  => 'Private',
-    		'class' => 'btn-default'
-    	]
-    ];
     public function getStatus()
     {
     	return array_get($this->status,$this->c_active);
     }
 
-    public function getHome()
+    public function products()
     {
-    	return array_get($this->home,$this->c_home);
+        return $this->hasMany(Product::class,'pro_category_id');
     }
+
 }

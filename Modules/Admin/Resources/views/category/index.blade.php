@@ -28,8 +28,6 @@
                         <tr>
                         <th>STT</th>
                         <th>Tên danh mục</th>
-                        <th>Title Seo</th>
-                        <th>Danh mục nổi bật</th>
                         <th>Trạng thái</th>
                         <th>Thao tác</th>
                         </tr>
@@ -41,10 +39,6 @@
                             <tr>
                                 <td>{{$stt}}</td>
                                 <td>{{$category->c_name}}</td>
-                                <td>{{$category->c_title_seo}}</td>
-                                <td>
-                                    <a href="{{route('admin.get.delete.category',['home',$category->id])}}" class="btn btn-xs {{$category->getHome()['class']}}">{{$category->getHome()['name']}}</a>
-                                </td>
                                 <td>
                                     <a href="{{route('admin.get.delete.category',['active',$category->id])}}" class="btn btn-xs {{$category->getStatus()['class']}}">{{$category->getStatus()['name']}}</a>
                                 </td>

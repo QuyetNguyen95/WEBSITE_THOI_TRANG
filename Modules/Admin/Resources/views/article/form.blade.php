@@ -32,6 +32,11 @@
              <div class="form-group">
                 <label for="name">Tác giả</label>
                 <input type="text" class="form-control" placeholder="Tác giả" name="a_author" value="{{old('a_author',isset($article->a_author) ? $article->a_author : '')}}">
+                 @if($errors->has('a_author'))
+                    <div class="error-text">
+                        {{$errors->first('a_author')}}
+                    </div>
+                @endif
             </div>
              <div class="form-group">
                 <img src="{{isset($article->a_avatar) ? pare_url_file($article->a_avatar) : asset('images/no_image.png')}}" alt="" style="width: 300px; height: 300px;" id="output_img">

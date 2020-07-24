@@ -38,6 +38,7 @@ Route::group(['prefix' => 'admin','middleware'=> 'CheckLoginAdmin'], function ()
 
     //san pham
     Route::group(['prefix' => 'product'], function() {
+        Route::post('/import','AdminProductController@import')->name('admin.get.import.product');
         Route::get('/','AdminProductController@index')->name('admin.get.list.product');
         Route::get('/create','AdminProductController@create')->name('admin.get.create.product');
         Route::post('/create','AdminProductController@store');
@@ -45,7 +46,12 @@ Route::group(['prefix' => 'admin','middleware'=> 'CheckLoginAdmin'], function ()
         Route::post('/update/{id}','AdminProductController@update');
         Route::get('{action}/{id}','AdminProductController@action')->name('admin.get.action.product');
     });
-
+    //Thống kê
+    Route::group(['prefix' => 'statistical'], function () {
+        Route::get('/day','AdminStatisticalController@day')->name('admin.get.day.statistical');
+        Route::get('/month','AdminStatisticalController@month')->name('admin.get.month.statistical');
+        Route::get('/year','AdminStatisticalController@year')->name('admin.get.year.statistical');
+    });
 
     //tin tuc
     Route::group(['prefix' => 'article'], function() {
@@ -86,6 +92,7 @@ Route::group(['prefix' => 'admin','middleware'=> 'CheckLoginAdmin'], function ()
         Route::get('/','AdminTransactionController@index')->name('admin.get.list.transaction');
         Route::get('view/{id}','AdminTransactionController@viewOrder')->name('admin.get.view.transaction');
         Route::get('generate-pdf/{id}', 'AdminTransactionController@pdfview')->name('admin.generate-pdf');
+        Route::get('export', 'AdminTransactionController@export')->name('admin.export.excel');
         Route::get('order/{id}','AdminTransactionController@deleteOrder')->name('admin.get.delete.order');
         Route::get('transaction/{action}/{id}','AdminTransactionController@action')->name('admin.get.action.transaction');
     });

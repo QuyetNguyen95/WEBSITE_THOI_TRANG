@@ -55,7 +55,11 @@
                               @foreach($articles as $article)
                                <tr>
                                   <td>{{$stt}}</td>
-                                  <td>{{$article->a_name}}</td>
+                                  <td>{{$article->a_name}}
+                                    <ul style="margin-left: -40px;">
+                                        <li>Lượt xem: {{$article->a_view}}</li>
+                                    </ul>
+                                  </td>
                                   <td>
                                       <img src="{{pare_url_file($article->a_avatar)}}" width="80px" height="80px">
                                   </td>

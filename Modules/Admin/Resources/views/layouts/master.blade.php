@@ -80,7 +80,7 @@
     <nav class="t-header">
       <div class="t-header-brand-wrapper">
         <a href="index.html">
-          <img class="logo" src="{{asset('img/logo/logo.png')}}"  style="width: 200px" alt="">
+          <img class="logo" src="{{asset('img/logo/logo.png')}}"  style="width: 200px;" alt="">
         </a>
       </div>
       @include('admin::components.header')
@@ -106,13 +106,30 @@
         <ul class="navigation-menu">
           <li class="{{\Request::url() == 'admin.dashboard' ? 'active' : ''}}">
             <a href="{{route('admin.dashboard')}}">
-              <span class="link-title">Trang tổng quan</span>
+              <span class="link-title">Trang chủ</span>
               <i class="mdi mdi-gauge link-icon"></i>
             </a>
           </li>
+          <li>
+            <a href="#sample-pages" data-toggle="collapse" aria-expanded="false">
+              <span class="link-title" style="margin-left: 19px;">Thống kê</span>
+              <i class="mdi mdi-chart-line"></i>
+            </a>
+            <ul class="collapse navigation-submenu" id="sample-pages">
+              <li class="{{\Request::url() == 'admin.get.day.statistical' ? 'active' : ''}}">
+                <a href="{{route('admin.get.day.statistical')}}" >Theo ngày</a>
+              </li>
+              <li class="{{\Request::url() == 'admin.get.month.statistical' ? 'active' : ''}}">
+                <a href="{{route('admin.get.month.statistical')}}" >Theo tháng</a>
+              </li>
+              <li class="{{\Request::url() == 'admin.get.year.statistical' ? 'active' : ''}}">
+                <a href="{{route('admin.get.year.statistical')}}" >Theo năm</a>
+              </li>
+            </ul>
+          </li>
           <li class="{{\Request::url() == 'admin.get.list.category' ? 'active' : ''}}">
             <a href="{{route('admin.get.list.category')}}">
-              <span class="link-title">Danh mục</span>
+              <span class="link-title">Danh mục sản phẩm</span>
               <i class="mdi mdi-bookmark link-icon"></i>
             </a>
           </li>
@@ -168,7 +185,7 @@
           @endif
           <li class="{{\Request::url() == 'admin.get.list.static' ? 'active' : ''}}">
             <a href="{{route('admin.get.list.static')}}">
-              <span class="link-title">Page tĩnh</span>
+              <span class="link-title">Danh mục</span>
               <i class="mdi mdi-assistant link-icon"></i>
             </a>
           </li>

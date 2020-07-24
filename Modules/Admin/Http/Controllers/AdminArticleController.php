@@ -68,7 +68,7 @@ class AdminArticleController extends AdminHeaderController
         $article->a_slug            = str_slug($requestArticle->a_name);
         $article->a_description     = $requestArticle->a_description;
         $article->a_content         = $requestArticle->a_content;
-        $article->a_author         = $requestArticle->a_author;
+        $article->a_author          = $requestArticle->a_author;
         if ($requestArticle->hasFile('avatar')) {
             $file = upload_image('avatar');
             if (isset($file['name'])) {

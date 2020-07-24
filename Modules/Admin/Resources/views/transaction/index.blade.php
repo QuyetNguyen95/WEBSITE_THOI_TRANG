@@ -19,9 +19,24 @@
             <div class="row" style="margin-bottom: 40px;">
                 <div class="col-md-12" style="display: flex">
                     <h2 class="title-1">Quản lý đơn hàng </h2>
+                    <a href="{{route('admin.export.excel')}}" style="margin-left: 633px;"><button class="btn btn-success"><i class="mdi mdi-export" style=""></i>Export excel</button></a>
                 </div>
             </div>
             </div>
+            <div class="row" style="margin-bottom: 30px">
+                <div class="col-md-12">
+                   <form class="form-inline" >
+                  <div class="form-group" style="margin-left: 10px;margin-right: 10px;">
+                     <select name="status" id="" class="form-control">
+                        <option value="">Tất cả</option>
+                        <option value="2" {{Request::get('status')== 2 ? 'selected' : ''}}>Đã xử lý</option>
+                        <option value="1" {{Request::get('status')== 1 ? 'selected' : ''}}>Chờ xử lý</option>
+                     </select>
+                  </div>
+                  <button type="submit" class="btn btn-sm btn-outline-info"><i class="mdi mdi-magnify"></i></button>
+                </form>
+                </div>
+              </div>
             <div class="row">
                <div class="col-md-12">
                    <table class="table">
@@ -56,13 +71,13 @@
                                   </td>
                                   <td>{{$transaction->created_at}}</td>
                                   <td style="padding-left: 0px;">
-                                    <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
+                                    <button class="btn btn-sm action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
                                         <a href="{{route('admin.get.action.transaction',['delete',$transaction->id])}}"> <i class="text-info mdi mdi-delete"></i></a>
                                     </button>
-                                    <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
+                                    <button class="btn btn-sm action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
                                         <a href="{{route('admin.get.view.transaction',$transaction->id)}}"> <i class="text-info mdi mdi-eye"></i></a>
                                     </button>
-                                    <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
+                                    <button class="btn btn-sm action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
                                         <a href="{{route('admin.generate-pdf',$transaction->id)}}"> <i class="text-info mdi mdi mdi-export"></i></a>
                                     </button>
                                   </td>

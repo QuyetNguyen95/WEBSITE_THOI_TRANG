@@ -142,4 +142,33 @@
     })();
     </script>
     <!--End of Tawk.to Script-->
+    <style>
+        .timer .timerBlock {
+            background: #F57D65 !important;
+            text-transform: uppercase;
+            font-weight: 400;
+            font-size: 20px;
+            color: #fff;
+            width: 60px;
+            display: block;
+            margin-bottom: 30px;
+         }
+        .timer .timerChild{
+            height: 30px;
+            padding-top: 5px;
+         }
+         .cate a:hover{
+             width: 200px !important;
+             height: 50px !important;
+             border-radius: 2px ;
+             background-color: #aab6c2;
+
+         }
+         .sp {
+            color: #444;
+            display: block;
+            font-weight: 700;
+            text-transform: uppercase;
+         }
+     </style>
   </header>

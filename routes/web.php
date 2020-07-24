@@ -28,7 +28,7 @@ Route::get('/bai-viet/{slug}-{id}','ArticleController@getDetailArticle')->name('
   Route::get('google/login','GoogleController@redirectProvider')->name('google.login');
 
 
-Route::group(['namespace' => 'auth'], function() {
+Route::group(['namespace' => 'Auth'], function() {
 	//dang ky
     Route::get('/dang-ky','RegisterController@getRegister')->name('get.register');
     Route::post('/dang-ky','RegisterController@postRegister');
@@ -55,19 +55,17 @@ Route::group(['prefix' => 'shopping'], function() {
     Route::get('danh-sach','ShoppingController@showProducts')->name('show.products.shopping');
     Route::post('/delete','ShoppingController@delete')->name('delete.products.shopping');
     Route::post('/quantity','ShoppingController@quantity')->name('quantity.products.shopping');
+});
 
+//chứng năng mua sản phẩm sau
+Route::group(['prefix' => 'favourite','middleware'=> 'CheckLoginFavourite'], function() {
+    Route::get('/buyAfter/{rowId}/{id}','ShoppingController@buyAfter')->name('buyAfter.products.shopping');
 });
 
 //đánh giá
 Route::group(['prefix' => 'ajax','middleware'=> 'CheckLoginRatting'], function() {
     Route::post('danh-gia/{id}','RatingController@saveRating')->name('post.rating.product');
     Route::post('reply/{id}','RatingController@saveReplyComment')->name('post.reply.comment.product');
-
-});
-
-//sản phẩm vừa xem
-Route::group(['prefix' => 'ajax'], function() {
-    Route::post('renderViewProduct','HomeController@renderViewProduct')->name('render.view.product');
 });
 
 //thanh toán
@@ -83,11 +81,21 @@ Route::group(['prefix' => 'user','middleware'=> 'CheckLoginUser'], function() {
     Route::post('/info','UserController@saveInfo');
     Route::get('/pass','UserController@updatePass')->name('get.pass.user');
     Route::post('/pass','UserController@savePass');
-    Route::get('/watch','UserController@justWatch')->name('get.just.watch.user');
-    Route::post('/watch','UserController@viewjustWatch')->name('get.view.just.watch.user');
+    Route::get('/watch','UserController@viewjustWatch')->name('get.view.just.watch.user');
     Route::get('/bestSell','UserController@bestSellingProduct')->name('get.best.sell.user');
     Route::get('/showDetailOrder/{id}','UserController@showDetailOrder')->name('get.show.detail.order.user');
     Route::get('generate-pdf/{id}', 'UserController@pdfview')->name('generate-pdf');
+    Route::get('/showFavouritePro', 'UserController@showFavouriteProduct')->name('get.show.favourite.product.user');
+    Route::get('/buyBeforeProduct', 'UserController@buyBeforeProduct')->name('get.show.buy.before.product.user');
+    Route::get('/deleteBuyBeforeProduct/{id}', 'UserController@deleteBuyBeforeProduct')->name('get.delete.buy.before.product.user');
+    Route::get('/deleteFavouritePro/{id}', 'UserController@deleteFavouriteProduct')->name('get.delete.favourite.product.user');
+    Route::post('/addproduct/{id}','UserController@addProducts')->name('add.products.shopping.user');
+    Route::get('/boughtProduct', 'UserController@boughtProduct')->name('get.show.bought.product.user');
+    Route::get('/showRating', 'UserController@showRating')->name('get.show.rating.user');
+});
+//sản phẩm yêu thích
+Route::group(['prefix' => 'favourite','middleware'=> 'CheckLoginFavourite'], function() {
+    Route::post('ajax-favourite/{idProduct}','UserController@addFavourite')->name('get.add.favourite.user');
 });
 
 

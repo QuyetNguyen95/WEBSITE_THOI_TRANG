@@ -608,7 +608,9 @@ transform: rotate(0deg) scale(1);}
 font-size: 20px;
 margin-bottom: 30px;
 padding-bottom: 10px;
-text-transform: uppercase;}
+text-transform: uppercase;
+text-align: center !important;
+}
 .single-features{position: relative;}
 .product-img{position:relative;overflow:hidden}
 .single-features a{position:relative;display:block;overflow:hidden}

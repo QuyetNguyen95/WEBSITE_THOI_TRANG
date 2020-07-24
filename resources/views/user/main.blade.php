@@ -78,10 +78,34 @@
                   <i class="mdi mdi-account-card-details link-icon"></i>
                 </a>
             </li>
-            <li class="{{Request::url() == route('get.just.watch.user') ? 'active' : ''}}">
-                <a href="{{route('get.just.watch.user')}}">
-                  <span class="link-title">Sản phẩm vừa xem</span>
+            <li class="{{Request::url() == route('get.view.just.watch.user') ? 'active' : ''}}">
+                <a href="{{route('get.view.just.watch.user')}}">
+                  <span class="link-title">Sản phẩm đã xem</span>
+                  <i class="mdi mdi-eye link-icon"></i>
+                </a>
+            </li>
+            <li class="{{Request::url() == route('get.show.favourite.product.user') ? 'active' : ''}}">
+                <a href="{{route('get.show.favourite.product.user')}}">
+                  <span class="link-title">Sản phẩm yêu thích</span>
                   <i class="mdi mdi-heart link-icon"></i>
+                </a>
+            </li>
+            <li class="{{Request::url() == route('get.show.buy.before.product.user') ? 'active' : ''}}">
+                <a href="{{route('get.show.buy.before.product.user')}}">
+                  <span class="link-title">Sản phẩm mua sau</span>
+                  <i class="mdi mdi-cart link-icon"></i>
+                </a>
+            </li>
+            <li class="{{Request::url() == route('get.show.bought.product.user') ? 'active' : ''}}">
+                <a href="{{route('get.show.bought.product.user')}}">
+                  <span class="link-title">Sản phẩm đã mua</span>
+                  <i class="mdi mdi-book-open link-icon"></i>
+                </a>
+            </li>
+            <li class="{{Request::url() == route('get.show.rating.user') ? 'active' : ''}}">
+                <a href="{{route('get.show.rating.user')}}">
+                  <span class="link-title">Đánh giá của tôi</span>
+                  <i class="mdi mdi-telegram link-icon"></i>
                 </a>
             </li>
             <li class="{{Request::url() == route('get.best.sell.user') ? 'active' : ''}}">
@@ -92,6 +116,15 @@
             </li>
           </ul>
         </div>
+        <!-- thông báo -->
+        @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+        @if(Session::has($msg))
+           <div class="alert alert-{{$msg}} alert-dismissible" style="margin-left: 800px; z-index: 99999; text-align: center; position: relative; top: 100px; position: fixed; width: 40%">
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+               {{Session::get($msg)}}
+            </div>
+           @endif
+       @endforeach
         <!-- partial -->
         <div class="page-content-wrapper">
             <div class="page-content-wrapper-inner">

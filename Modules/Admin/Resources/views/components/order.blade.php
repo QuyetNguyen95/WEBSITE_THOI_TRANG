@@ -45,10 +45,10 @@
                <td>
                    <img src="{{isset($order->product->pro_avatar) ? pare_url_file($order->product->pro_avatar) : ''}}" style="width: 60px; height: 70px;" alt="">
                </td>
-               <td>{{number_format($order->or_price,0,',','.')}} đ</td>
-               <td>{{number_format($order->or_price*(1-$order->product->pro_sale/100),0,',','.')}} đ ({{$order->product->pro_sale}}%)</td>
+               <td>{{number_format($order->product->pro_price,0,',','.')}} đ</td>
+               <td>{{number_format($order->product->pro_price*(1-$order->product->pro_sale/100),0,',','.')}} đ ({{$order->product->pro_sale}}%)</td>
                <td style="padding-left: 33px;">{{$order->or_qty}}/{{$order->product->pro_number}}</td>
-               <td>{{number_format($order->or_price*(1-$order->product->pro_sale/100)*$order->or_qty,0,',','.')}}đ</td>
+               <td>{{number_format($order->product->pro_price*(1-$order->product->pro_sale/100)*$order->or_qty,0,',','.')}}đ</td>
                <td>
                    <button class="btn action-btn btn-refresh btn-outline-primary btn-rounded component-flat">
                        <a href="{{route('admin.get.delete.order',$order->id)}}"> <i class="text-info mdi mdi-delete"></i></a>
@@ -59,6 +59,7 @@
                @endforeach
            </tbody>
     </table>
+    <div style="margin-left: 74%;font-size: 20px;">Tổng tiền: {{number_format($totalTransaction->tr_total,0,"",".")}} vnđ</div>
    @endif
     @else
         <h2>Không có sản phẩm nào!!</h2>

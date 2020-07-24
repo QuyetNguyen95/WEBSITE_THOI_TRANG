@@ -20,7 +20,7 @@
                         </div>
                         <div class="clear"></div>
                         @endforeach
-                      <p class="total">Tổng: <span class="amount">{{Cart::subtotal(0,'.','.')}}</span></p>
+                      <p class="total">Tổng: <span class="amount">{{Cart::subtotal(0,'.','.')}} đ</span></p>
                       <div class="clear"></div>
                       @if (Cart::count() > 0)
                       <p class="cart-button-top"><a href="{{route('get.pay.shopping')}}">Thanh toán</a></p>

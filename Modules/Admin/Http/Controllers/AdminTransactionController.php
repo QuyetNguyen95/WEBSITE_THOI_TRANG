@@ -7,9 +7,12 @@ use App\Models\Product;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Exports\TransactionExport;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade as PDF;
+use Maatwebsite\Excel\Facades\Excel;
+use Modules\Admin\Http\Controllers\AdminHeaderController;
 
 class AdminTransactionController extends AdminHeaderController
 {
@@ -19,9 +22,14 @@ class AdminTransactionController extends AdminHeaderController
 		parent::__construct();
 	}
 
-    public function index()
+    public function index(Request $request)
     {
-    	$transactions = Transaction::with('user:id,name')->paginate(5);
+        $transactions = Transaction::with('user:id,name')->whereraw(1);
+        if($request->status)
+        {
+           $transactions = $transactions->where('tr_status',$request->status-1);
+        }
+        $transactions = $transactions->orderBy('id','desc')->paginate(5);
         return view('admin::transaction.index',compact('transactions'));
     }
 
@@ -65,14 +73,18 @@ class AdminTransactionController extends AdminHeaderController
     }
     public function deleteOrder($id)
     {
-        $deleteOrder  = Order::find($id);
-        $deleteOrder->delete();
+        $order  = Order::find($id);
+        //xóa order thì phải giảm số tiền tương ứng trong transaction
+        $money = $order->or_qty*($order->or_price - ($order->or_sale/100)*$order->or_price);
+        DB::table('transactions')->where('id',$order->or_transaction_id)->decrement('tr_total',$money);
+        $order->delete();
         return redirect()->back()->with('danger','Xóa sản phẩm thành công');
     }
     public function viewOrder(Request $request, $id)
     {
+        $totalTransaction = Transaction::select('tr_total')->
         $orders = Order::with("product")->where("or_transaction_id",$id)->get();//lay du lieu cua chi tiet don hang
-        return  view('admin::components.order',compact('orders'));
+        return  view('admin::components.order',compact('orders','totalTransaction'));
     }
 
  // Xuất đơn hàng ra dạng pdf
@@ -89,5 +101,12 @@ class AdminTransactionController extends AdminHeaderController
        ];
       $pdf = PDF::loadView('admin::transaction.export_pdf',$data);
       return $pdf->download('nguyencuongquyet_admin.pdf');
+      //return view('admin::transaction.export_pdf',$data);
+    }
+
+    //xuất file excel đơn hàng
+    public function export()
+    {
+        return Excel::download(new TransactionExport(), 'nguyencuongquyet.xlsx');
     }
 }

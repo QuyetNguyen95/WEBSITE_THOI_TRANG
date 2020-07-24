@@ -29,8 +29,8 @@
             </div>
             </div>
             <div class="row" style="margin-bottom: 30px">
-              <div class="col-md-12">
-                 <form class="form-inline" >
+              <div class="col-md-6">
+                 <form class="form-inline" method="get" action="">
                 <div class="form-group">
                   <input type="text" class="form-control"  placeholder="Tên sản phẩm" id="myInput" name="name" value="{{Request::get('name')}}">
                 </div>
@@ -47,6 +47,15 @@
                 <button type="submit" class="btn btn-sm btn-outline-info"><i class="mdi mdi-magnify"></i></button>
               </form>
               </div>
+              <div class="col-md-6">
+                <form action="{{route('admin.get.import.product')}}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <input  type="file" name="product_file"  accept=".xlsx, .xls, .csv, .ods" >
+                        <button type="submit" class="btn btn-primary">Thêm sp bằng file excel</button>
+                    </div>
+                  </form>
+              </div>
             </div>
             <div class="row">
                <div class="col-md-12">
@@ -58,6 +67,7 @@
                             <th>Danh mục</th>
                             <th>Hình ảnh</th>
                             <th>Hình ảnh+</th>
+                            <th>Số lượng</th>
                             <th>Trạng thái</th>
                             <th>Nổi bật</th>
                             <th>Thao tác</th>
@@ -72,7 +82,7 @@
                                   <td>{{$product->pro_name}}
                                     <ul style="list-style: none;margin-left: -38px;">
                                       <li>Loại sản phẩm: {{$product->pro_type}}</li>
-                                      <li>Giá cả: {{$product->pro_price}} VNĐ</li>
+                                      <li>Giá cả: {{number_format($product->pro_price,0,"",".")}} VNĐ</li>
                                       <li>Sale: {{$product->pro_sale}}%</li>
                                       <?php
                                         $averageRating = 0;
@@ -89,9 +99,9 @@
                                             /{{$averageRating}}
                                         </div>
                                       </li>
-                                      <li>Số lượng: {{$product->pro_number}}</li>
                                       <li>Màu: {{$product->pro_color}}</li>
                                       <li>Size: {{$product->pro_size}}</li>
+                                      <li>Lượt xem: {{$product->pro_view}}</li>
                                     </ul>
                                   </td>
                                   <td>{{isset($product->category->c_name) ? $product->category->c_name : 'N/A' }}</td>
@@ -101,8 +111,11 @@
                                    <td>
                                      <img src="{{pare_url_file($product->pro_img)}}" width="80px" height="80px">
                                   </td>
+                                  <td>
+                                      <p>{{$product->pro_number}} cái</p>
+                                  </td>
                                    <td>
-                                      <a href="{{route('admin.get.action.product',['active',$product->id])}}" class="btn btn-xs {{$product->getStatus()['class']}}">{{$product->getStatus()['name']}}</a>
+                                      <a href="{{route('admin.get.action.product',['active',$product->id])}}" class="btn btn-xs {{$product->pro_active == 1 ? 'btn-danger' : 'btn-default'}}">{{$product->pro_active == 1 ? 'Hiển thị' : 'Không'}}</a>
                                   </td>
                                   <td>
                                       <a href="{{route('admin.get.action.product',['hot',$product->id])}}" class="btn btn-xs {{$product->getHot()['class']}}">{{$product->getHot()['name']}}</a>
@@ -128,15 +141,5 @@
     <div class="">{{$products->appends($query)->links()}}</div>
 </div>
 @endsection
-@section('script')
-<script>
-    $(document).ready(function(){
-      $("#myInput").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#myTable tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-      });
-    });
-    </script>
-@endsection
+
+

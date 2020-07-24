@@ -36,8 +36,8 @@ return [
     ],
 
     'google' => [
-        'client_id' => '622590158795-07gc2dtd1ka9tqntu83pkgdkthtrp07u.apps.googleusercontent.com',
-        'client_secret' => 'eptVB3kQ0rue5ZjgJB4z4sLH',
-        'redirect' => 'http://orianna.com/google/callback',
+        'client_id' => env('622590158795-pcsd76r9vt1d8112q2d63ufiv0lraao8.apps.googleusercontent.com'),
+        'client_secret' => env('IqIRk-9P6ibMnnqtwquzmK8y'),
+        'redirect' => env('http://orianna.com/google/callback'),
     ],
 ];

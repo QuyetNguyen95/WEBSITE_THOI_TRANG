@@ -28,15 +28,26 @@
             <div class="row" style="margin-bottom: 40px;">
                 <div class="col-md-12" style="display: flex">
                         <h2 class="title-1">Quản lý Kho hàng </h2>
-                        <h2 style="margin-left: 12px">
-                            <a href="?type=selling" style="color: blue" class="{{Request::get('type') == 'selling' ||
-                             Request::get('type') == NULL  ? 'selected' : ''}}">Hàng bán chạy</a> -
-                            <a href="?type=inventory" style="color: red" class="{{Request::get('type') ==
-                            'inventory' ? 'selected' : ''}}">Hàng tồn kho</a>
-                        </h2>
                 </div>
             </div>
             </div>
+            <div class="row" style="margin-bottom: 30px">
+                <div class="col-md-12">
+                   <form class="form-inline" >
+                  <div class="form-group">
+                    <input type="text" class="form-control"  placeholder="Tên sản phẩm" id="myInput" name="name" value="{{Request::get('name')}}">
+                  </div>
+                  <div class="form-group" style="margin-left: 10px;margin-right: 10px;">
+                     <select name="choice" id="" class="form-control">
+                        <option value="1" {{Request::get('choice') == '1' ? 'selected' : ''}}>Sản phẩm bán chạy</option>
+                        <option value="2" {{Request::get('choice') == '2' ? 'selected' : ''}}>Sản phẩm tồn kho</option>
+                        <option value="3" {{Request::get('choice') == '3' ? 'selected' : ''}}>Sản phẩm đã hết hàng</option>
+                     </select>
+                  </div>
+                  <button type="submit" class="btn btn-sm btn-outline-info"><i class="mdi mdi-magnify"></i></button>
+                </form>
+                </div>
+              </div>
             <div class="row">
                 <div class="col-md-12">
                     <table class="table">
@@ -47,8 +58,6 @@
                              <th>Danh mục</th>
                              <th>Hình ảnh</th>
                              <th>Hình ảnh+</th>
-                             <th>Trạng thái</th>
-                             <th>Nổi bật</th>
                              <th>Lượt bán</th>
                            </tr>
                          </thead>
@@ -89,20 +98,6 @@
                                    </td>
                                     <td>
                                       <img src="{{pare_url_file($product->pro_img)}}" width="80px" height="80px">
-                                   </td>
-                                    <td>
-                                       @if ($product->pro_active == 1)
-                                            <button class="btn btn-xs btn-danger">Public</button>
-                                       @else
-                                             <button class="btn btn-xs btn-default">Private</button>
-                                       @endif
-                                   </td>
-                                   <td>
-                                        @if ($product->pro_hot == 1)
-                                            <button class="btn btn-xs btn-info">Nổi bật</button>
-                                        @else
-                                                <button class="btn btn-xs btn-default">Không</button>
-                                        @endif
                                    </td>
                                    <td>
                                         {{$product->pro_pay}}

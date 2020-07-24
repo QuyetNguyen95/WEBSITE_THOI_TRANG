@@ -1,22 +1,6 @@
 @extends('layouts.app')
 @section('content')
  <!-- HOME SLIDER -->
- <style>
-    .timer .timerBlock {
-        background: #F57D65 !important;
-        text-transform: uppercase;
-        font-weight: 400;
-        font-size: 20px;
-        color: #fff;
-        width: 60px;
-        display: block;
-        margin-bottom: 30px;
-     }
-    .timer .timerChild{
-        height: 30px;
-        padding-top: 5px;
-     }
- </style>
 @include('components.slider')
 <!-- HOME SLIDER END -->
 	<!-- features-area start -->
@@ -30,7 +14,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="features-curosel">
+        <div class="features-curosel"><!--features-curosel-->
           <!-- single-features start -->
           @if($getListHotAndActiveProduct)
             @foreach($getListHotAndActiveProduct as $getSingleHotAndActiveProduct)
@@ -48,7 +32,7 @@
                        src="{{pare_url_file($getSingleHotAndActiveProduct->pro_img)}}" alt="" />
                     </a>
                     <a class="modal-view" href="{{route('get.quickView.product',$getSingleHotAndActiveProduct->id)}}">
-                        Quick View</a>
+                        Xem nhanh</a>
 
                   </div>
                   <?php
@@ -90,8 +74,72 @@
 </div>
     <!-- just watch product end -->
 
+<!-- sản phẩm đã xem start -->
+@if (count($listViewedProduct) > 0)
+<div class="features-area">
+   <div class="container">
+     <div class="row">
+       <div class="col-lg-12 col-md-12 col-sm-12">
+         <div class="section-heading">
+           <h3>Sản phẩm bạn đã xem</h3>
+         </div>
+       </div>
+     </div>
+     <div class="row">
+       <div class="features-curosel">
+         <!-- single-features start -->
+           @foreach($listViewedProduct as $singleProduct)
+             <div class="col-md-3">
+               <div class="single-features">
+                 @if($singleProduct->pro_sale > 0)
+                   <span class="sale-text">-{{$singleProduct->pro_sale}}%</span>
+                 @endif
+                 <div class="product-img">
+                 <a href="{{route('get.detail.product',[$singleProduct->pro_slug,
+                 $singleProduct->id])}}">
+                     <img style="width: 263px; height: 346px" class="first-img"
+                     src="{{pare_url_file($singleProduct->pro_avatar)}}" alt="" />
+                     <img style="width: 263px; height: 346px" class="second-img"
+                      src="{{pare_url_file($singleProduct->pro_img)}}" alt="" />
+                   </a>
+                   <a class="modal-view" href="{{route('get.quickView.product',$singleProduct->id)}}">
+                       Quick View</a>
+
+                 </div>
+                 <?php
+                       $averageRating = 0;
+                       if ($singleProduct->pro_total_rating > 0) {
+                           $averageRating = $singleProduct->pro_total_number/$singleProduct->pro_total_rating;
+                       }
+
+                   ?>
+                 <div class="product-content">
+                   <div class="pro-rating">
+                       @for ($i = 1; $i <= 5; $i++)
+                       <a href="#"><i class="fa {{$i<=$averageRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                       @endfor
+                   </div>
+                   <h5><a href="#" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                       {{mb_strtolower($singleProduct->pro_name)}}</a></h5>
+                   @if($singleProduct->pro_sale > 0)
+                     <span class="old-price">{{number_format($singleProduct->pro_price,0,'','.')}} đ</span>
+                     <span class="pro-price">{{get_cal_sale($singleProduct->pro_price,
+                     $singleProduct->pro_sale)}} đ</span>
+                   @else
+                     <span class="pro-price">{{number_format($singleProduct->pro_price,0,'','.')}} đ</span>
+                   @endif
+                 </div>
+               </div>
+             </div>
+           @endforeach
+       </div>
+     </div>
+   </div>
+ </div>
+@endif
+ <!-- sản phẩm đã xem end -->
  <!-- sản phẩm đã mua start -->
- @if (!empty($listProduct))
+ @if (count($listProduct) > 0)
  <div class="features-area">
     <div class="container">
       <div class="row">
@@ -148,12 +196,12 @@
                 </div>
               </div>
             @endforeach
-          <!-- sản phẩm đã mua end -->
         </div>
       </div>
     </div>
   </div>
  @endif
+  <!-- sản phẩm đã mua end -->
   <!-- features-area end -->
   <!-- banner-area start -->
   @include('components.banner')
@@ -249,21 +297,33 @@
                       <div class="single-category-tab">
                         <div class="single-features">
                           <div class="product-img">
-                            <a href="#">
+                            <a href="{{route('get.detail.product',[$getSingleAscMan->pro_slug,$getSingleAscMan->id])}}">
                               <img class="first-img" src="{{pare_url_file($getSingleAscMan->pro_avatar)}}" alt="" style="width: 126px; height: 166px" />
                               <img class="second-img" src="{{pare_url_file($getSingleAscMan->pro_img)}}" alt="" style="width: 126px; height: 166px" />
                             </a>
                           </div>
-                          <div class="product-content">
+                          <?php
+                        $averageSaleRating = 0;
+                        if ($getSingleAscMan->pro_total_rating > 0) {
+                            $averageSaleRating = $getSingleAscMan->pro_total_number/$getSingleAscMan->pro_total_rating;
+                            }
+
+                        ?>
+                        <div class="product-content">
                             <div class="pro-rating">
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
+                                @for ($i = 1; $i <= 5; $i++)
+                                <a href="#"><i class="fa {{$i<=$averageSaleRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                                @endfor
                             </div>
-                            <h5><a href="#">Phasellus vel hendrerit</a></h5>
-                            <span class="pro-price">£55.00</span>
-                          </div>
+                        <h5><a href="{{route('get.detail.product',[$getSingleAscMan->pro_slug,$getSingleAscMan->id])}}">{{$getSingleAscMan->pro_name}}</a></h5>
+                        @if($getSingleAscMan->pro_sale > 0)
+                        <span class="old-price">{{number_format($getSingleAscMan->pro_price,0,'','.')}} đ</span>
+                        <span class="pro-price">{{get_cal_sale($getSingleAscMan->pro_price,
+                        $getSingleAscMan->pro_sale)}} đ</span>
+                         @else
+                         <span class="pro-price">{{number_format($getSingleAscMan->pro_price,0,'','.')}} đ</span>
+                         @endif
+                        </div>
                         </div>
                       </div>
                       @endforeach
@@ -277,20 +337,32 @@
                       <div class="single-category-tab">
                         <div class="single-features">
                           <div class="product-img">
-                            <a href="#">
+                            <a href="{{route('get.detail.product',[$getSingleDescMan->pro_slug,$getSingleDescMan->id])}}">
                               <img class="first-img" src="{{pare_url_file($getSingleDescMan->pro_avatar)}}" alt="" style="width: 126px; height: 166px" />
                               <img class="second-img" src="{{pare_url_file($getSingleDescMan->pro_img)}}" alt="" style="width: 126px; height: 166px" />
                             </a>
                           </div>
+                          <?php
+                          $averageSaleRating = 0;
+                          if ($getSingleDescMan->pro_total_rating > 0) {
+                              $averageSaleRating = $getSingleDescMan->pro_total_number/$getSingleDescMan->pro_total_rating;
+                              }
+
+                          ?>
                           <div class="product-content">
-                            <div class="pro-rating">
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                            </div>
-                            <h5><a href="#">Phasellus vel hendrerit</a></h5>
-                            <span class="pro-price">£55.00</span>
+                              <div class="pro-rating">
+                                  @for ($i = 1; $i <= 5; $i++)
+                                  <a href="#"><i class="fa {{$i<=$averageSaleRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                                  @endfor
+                              </div>
+                          <h5><a href="{{route('get.detail.product',[$getSingleDescMan->pro_slug,$getSingleDescMan->id])}}">{{$getSingleDescMan->pro_name}}</a></h5>
+                          @if($getSingleDescMan->pro_sale > 0)
+                          <span class="old-price">{{number_format($getSingleDescMan->pro_price,0,'','.')}} đ</span>
+                          <span class="pro-price">{{get_cal_sale($getSingleDescMan->pro_price,
+                          $getSingleDescMan->pro_sale)}} đ</span>
+                           @else
+                           <span class="pro-price">{{number_format($getSingleDescMan->pro_price,0,'','.')}} đ</span>
+                           @endif
                           </div>
                         </div>
                       </div>
@@ -305,20 +377,32 @@
                       <div class="single-category-tab">
                         <div class="single-features">
                           <div class="product-img">
-                            <a href="#">
+                            <a href="{{route('get.detail.product',[$getSingleAscMan->pro_slug,$getSingleAscMan->id])}}">
                               <img class="first-img" src="{{pare_url_file($getSingleAscMan->pro_avatar)}}" alt="" style="width: 126px; height: 166px" />
                               <img class="second-img" src="{{pare_url_file($getSingleAscMan->pro_img)}}" alt="" style="width: 126px; height: 166px" />
                             </a>
                           </div>
+                          <?php
+                          $averageSaleRating = 0;
+                          if ($getSingleAscMan->pro_total_rating > 0) {
+                              $averageSaleRating = $getSingleAscMan->pro_total_number/$getSingleAscMan->pro_total_rating;
+                              }
+
+                          ?>
                           <div class="product-content">
-                            <div class="pro-rating">
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                            </div>
-                            <h5><a href="#">Phasellus vel hendrerit</a></h5>
-                            <span class="pro-price">£55.00</span>
+                              <div class="pro-rating">
+                                  @for ($i = 1; $i <= 5; $i++)
+                                  <a href="#"><i class="fa {{$i<=$averageSaleRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                                  @endfor
+                              </div>
+                          <h5><a href="{{route('get.detail.product',[$getSingleAscMan->pro_slug,$getSingleAscMan->id])}}">{{$getSingleAscMan->pro_name}}</a></h5>
+                          @if($getSingleAscMan->pro_sale > 0)
+                          <span class="old-price">{{number_format($getSingleAscMan->pro_price,0,'','.')}} đ</span>
+                          <span class="pro-price">{{get_cal_sale($getSingleAscMan->pro_price,
+                          $getSingleAscMan->pro_sale)}} đ</span>
+                           @else
+                           <span class="pro-price">{{number_format($getSingleAscMan->pro_price,0,'','.')}} đ</span>
+                           @endif
                           </div>
                         </div>
                       </div>
@@ -333,20 +417,32 @@
                       <div class="single-category-tab">
                         <div class="single-features">
                           <div class="product-img">
-                            <a href="#">
+                            <a href="{{route('get.detail.product',[$getSingleDescMan->pro_slug,$getSingleDescMan->id])}}">
                               <img class="first-img" src="{{pare_url_file($getSingleDescMan->pro_avatar)}}" alt="" style="width: 126px; height: 166px" />
                               <img class="second-img" src="{{pare_url_file($getSingleDescMan->pro_img)}}" alt="" style="width: 126px; height: 166px" />
                             </a>
                           </div>
+                          <?php
+                          $averageSaleRating = 0;
+                          if ($getSingleDescMan->pro_total_rating > 0) {
+                              $averageSaleRating = $getSingleDescMan->pro_total_number/$getSingleDescMan->pro_total_rating;
+                              }
+
+                          ?>
                           <div class="product-content">
-                            <div class="pro-rating">
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                            </div>
-                            <h5><a href="#">Phasellus vel hendrerit</a></h5>
-                            <span class="pro-price">£55.00</span>
+                              <div class="pro-rating">
+                                  @for ($i = 1; $i <= 5; $i++)
+                                  <a href="#"><i class="fa {{$i<=$averageSaleRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                                  @endfor
+                              </div>
+                          <h5><a href="{{route('get.detail.product',[$getSingleDescMan->pro_slug,$getSingleDescMan->id])}}">{{$getSingleDescMan->pro_name}}</a></h5>
+                          @if($getSingleDescMan->pro_sale > 0)
+                          <span class="old-price">{{number_format($getSingleDescMan->pro_price,0,'','.')}} đ</span>
+                          <span class="pro-price">{{get_cal_sale($getSingleDescMan->pro_price,
+                          $getSingleDescMan->pro_sale)}} đ</span>
+                           @else
+                           <span class="pro-price">{{number_format($getSingleDescMan->pro_price,0,'','.')}} đ</span>
+                           @endif
                           </div>
                         </div>
                       </div>
@@ -367,20 +463,32 @@
                       <div class="single-category-tab">
                         <div class="single-features">
                           <div class="product-img">
-                            <a href="#">
+                            <a href="{{route('get.detail.product',[$getSingleAscMan->pro_slug,$getSingleAscMan->id])}}">
                               <img class="first-img" src="{{pare_url_file($getSingleAscMan->pro_avatar)}}" alt="" style="width: 126px; height: 166px" />
                               <img class="second-img" src="{{pare_url_file($getSingleAscMan->pro_img)}}" alt="" style="width: 126px; height: 166px" />
                             </a>
                           </div>
+                          <?php
+                          $averageSaleRating = 0;
+                          if ($getSingleAscMan->pro_total_rating > 0) {
+                              $averageSaleRating = $getSingleAscMan->pro_total_number/$getSingleAscMan->pro_total_rating;
+                              }
+
+                          ?>
                           <div class="product-content">
-                            <div class="pro-rating">
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                            </div>
-                            <h5><a href="#">Phasellus vel hendrerit</a></h5>
-                            <span class="pro-price">£55.00</span>
+                              <div class="pro-rating">
+                                  @for ($i = 1; $i <= 5; $i++)
+                                  <a href="#"><i class="fa {{$i<=$averageSaleRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                                  @endfor
+                              </div>
+                          <h5><a href="{{route('get.detail.product',[$getSingleAscMan->pro_slug,$getSingleAscMan->id])}}">{{$getSingleAscMan->pro_name}}</a></h5>
+                          @if($getSingleAscMan->pro_sale > 0)
+                          <span class="old-price">{{number_format($getSingleAscMan->pro_price,0,'','.')}} đ</span>
+                          <span class="pro-price">{{get_cal_sale($getSingleAscMan->pro_price,
+                          $getSingleAscMan->pro_sale)}} đ</span>
+                           @else
+                           <span class="pro-price">{{number_format($getSingleAscMan->pro_price,0,'','.')}} đ</span>
+                           @endif
                           </div>
                         </div>
                       </div>
@@ -395,20 +503,32 @@
                       <div class="single-category-tab">
                         <div class="single-features">
                           <div class="product-img">
-                            <a href="#">
+                            <a href="{{route('get.detail.product',[$getSingleDescMan->pro_slug,$getSingleDescMan->id])}}">
                               <img class="first-img" src="{{pare_url_file($getSingleDescMan->pro_avatar)}}" alt="" style="width: 126px; height: 166px" />
                               <img class="second-img" src="{{pare_url_file($getSingleDescMan->pro_img)}}" alt="" style="width: 126px; height: 166px" />
                             </a>
                           </div>
+                          <?php
+                          $averageSaleRating = 0;
+                          if ($getSingleDescMan->pro_total_rating > 0) {
+                              $averageSaleRating = $getSingleDescMan->pro_total_number/$getSingleDescMan->pro_total_rating;
+                              }
+
+                          ?>
                           <div class="product-content">
-                            <div class="pro-rating">
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                            </div>
-                            <h5><a href="#">Phasellus vel hendrerit</a></h5>
-                            <span class="pro-price">£55.00</span>
+                              <div class="pro-rating">
+                                  @for ($i = 1; $i <= 5; $i++)
+                                  <a href="#"><i class="fa {{$i<=$averageSaleRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                                  @endfor
+                              </div>
+                          <h5><a href="{{route('get.detail.product',[$getSingleDescMan->pro_slug,$getSingleDescMan->id])}}">{{$getSingleDescMan->pro_name}}</a></h5>
+                          @if($getSingleDescMan->pro_sale > 0)
+                          <span class="old-price">{{number_format($getSingleDescMan->pro_price,0,'','.')}} đ</span>
+                          <span class="pro-price">{{get_cal_sale($getSingleDescMan->pro_price,
+                          $getSingleDescMan->pro_sale)}} đ</span>
+                           @else
+                           <span class="pro-price">{{number_format($getSingleDescMan->pro_price,0,'','.')}} đ</span>
+                           @endif
                           </div>
                         </div>
                       </div>
@@ -423,20 +543,32 @@
                       <div class="single-category-tab">
                         <div class="single-features">
                           <div class="product-img">
-                            <a href="#">
+                            <a href="{{route('get.detail.product',[$getSingleAscMan->pro_slug,$getSingleAscMan->id])}}">
                               <img class="first-img" src="{{pare_url_file($getSingleAscMan->pro_avatar)}}" alt="" style="width: 126px; height: 166px" />
                               <img class="second-img" src="{{pare_url_file($getSingleAscMan->pro_img)}}" alt="" style="width: 126px; height: 166px" />
                             </a>
                           </div>
+                          <?php
+                          $averageSaleRating = 0;
+                          if ($getSingleAscMan->pro_total_rating > 0) {
+                              $averageSaleRating = $getSingleAscMan->pro_total_number/$getSingleAscMan->pro_total_rating;
+                              }
+
+                          ?>
                           <div class="product-content">
-                            <div class="pro-rating">
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                            </div>
-                            <h5><a href="#">Phasellus vel hendrerit</a></h5>
-                            <span class="pro-price">£55.00</span>
+                              <div class="pro-rating">
+                                  @for ($i = 1; $i <= 5; $i++)
+                                  <a href="#"><i class="fa {{$i<=$averageSaleRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                                  @endfor
+                              </div>
+                          <h5><a href="{{route('get.detail.product',[$getSingleAscMan->pro_slug,$getSingleAscMan->id])}}">{{$getSingleAscMan->pro_name}}</a></h5>
+                          @if($getSingleAscMan->pro_sale > 0)
+                          <span class="old-price">{{number_format($getSingleAscMan->pro_price,0,'','.')}} đ</span>
+                          <span class="pro-price">{{get_cal_sale($getSingleAscMan->pro_price,
+                          $getSingleAscMan->pro_sale)}} đ</span>
+                           @else
+                           <span class="pro-price">{{number_format($getSingleAscMan->pro_price,0,'','.')}} đ</span>
+                           @endif
                           </div>
                         </div>
                       </div>
@@ -451,20 +583,32 @@
                       <div class="single-category-tab">
                         <div class="single-features">
                           <div class="product-img">
-                            <a href="#">
+                            <a href="{{route('get.detail.product',[$getSingleDescMan->pro_slug,$getSingleDescMan->id])}}">
                               <img class="first-img" src="{{pare_url_file($getSingleDescMan->pro_avatar)}}" alt="" style="width: 126px; height: 166px" />
                               <img class="second-img" src="{{pare_url_file($getSingleDescMan->pro_img)}}" alt="" style="width: 126px; height: 166px" />
                             </a>
                           </div>
+                          <?php
+                          $averageSaleRating = 0;
+                          if ($getSingleDescMan->pro_total_rating > 0) {
+                              $averageSaleRating = $getSingleDescMan->pro_total_number/$getSingleDescMan->pro_total_rating;
+                              }
+
+                          ?>
                           <div class="product-content">
-                            <div class="pro-rating">
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                            </div>
-                            <h5><a href="#">Phasellus vel hendrerit</a></h5>
-                            <span class="pro-price">£55.00</span>
+                              <div class="pro-rating">
+                                  @for ($i = 1; $i <= 5; $i++)
+                                  <a href="#"><i class="fa {{$i<=$averageSaleRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                                  @endfor
+                              </div>
+                          <h5><a href="{{route('get.detail.product',[$getSingleDescMan->pro_slug,$getSingleDescMan->id])}}">{{$getSingleDescMan->pro_name}}</a></h5>
+                          @if($getSingleDescMan->pro_sale > 0)
+                          <span class="old-price">{{number_format($getSingleDescMan->pro_price,0,'','.')}} đ</span>
+                          <span class="pro-price">{{get_cal_sale($getSingleDescMan->pro_price,
+                          $getSingleDescMan->pro_sale)}} đ</span>
+                           @else
+                           <span class="pro-price">{{number_format($getSingleDescMan->pro_price,0,'','.')}} đ</span>
+                           @endif
                           </div>
                         </div>
                       </div>
@@ -485,20 +629,32 @@
                       <div class="single-category-tab">
                         <div class="single-features">
                           <div class="product-img">
-                            <a href="#">
+                            <a href="{{route('get.detail.product',[$getSingleAscMan->pro_slug,$getSingleAscMan->id])}}">
                               <img class="first-img" src="{{pare_url_file($getSingleAscMan->pro_avatar)}}" alt="" style="width: 126px; height: 166px" />
                               <img class="second-img" src="{{pare_url_file($getSingleAscMan->pro_img)}}" alt="" style="width: 126px; height: 166px" />
                             </a>
                           </div>
+                          <?php
+                          $averageSaleRating = 0;
+                          if ($getSingleAscMan->pro_total_rating > 0) {
+                              $averageSaleRating = $getSingleAscMan->pro_total_number/$getSingleAscMan->pro_total_rating;
+                              }
+
+                          ?>
                           <div class="product-content">
-                            <div class="pro-rating">
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                            </div>
-                            <h5><a href="#">Phasellus vel hendrerit</a></h5>
-                            <span class="pro-price">£55.00</span>
+                              <div class="pro-rating">
+                                  @for ($i = 1; $i <= 5; $i++)
+                                  <a href="#"><i class="fa {{$i<=$averageSaleRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                                  @endfor
+                              </div>
+                          <h5><a href="{{route('get.detail.product',[$getSingleAscMan->pro_slug,$getSingleAscMan->id])}}">{{$getSingleAscMan->pro_name}}</a></h5>
+                          @if($getSingleAscMan->pro_sale > 0)
+                          <span class="old-price">{{number_format($getSingleAscMan->pro_price,0,'','.')}} đ</span>
+                          <span class="pro-price">{{get_cal_sale($getSingleAscMan->pro_price,
+                          $getSingleAscMan->pro_sale)}} đ</span>
+                           @else
+                           <span class="pro-price">{{number_format($getSingleAscMan->pro_price,0,'','.')}} đ</span>
+                           @endif
                           </div>
                         </div>
                       </div>
@@ -513,20 +669,32 @@
                       <div class="single-category-tab">
                         <div class="single-features">
                           <div class="product-img">
-                            <a href="#">
+                            <a href="{{route('get.detail.product',[$getSingleDescMan->pro_slug,$getSingleDescMan->id])}}">
                               <img class="first-img" src="{{pare_url_file($getSingleDescMan->pro_avatar)}}" alt="" style="width: 126px; height: 166px" />
                               <img class="second-img" src="{{pare_url_file($getSingleDescMan->pro_img)}}" alt="" style="width: 126px; height: 166px" />
                             </a>
                           </div>
+                          <?php
+                          $averageSaleRating = 0;
+                          if ($getSingleDescMan->pro_total_rating > 0) {
+                              $averageSaleRating = $getSingleDescMan->pro_total_number/$getSingleDescMan->pro_total_rating;
+                              }
+
+                          ?>
                           <div class="product-content">
-                            <div class="pro-rating">
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                              <a href="#"><i class="fa fa-star"></i></a>
-                            </div>
-                            <h5><a href="#">Phasellus vel hendrerit</a></h5>
-                            <span class="pro-price">£55.00</span>
+                              <div class="pro-rating">
+                                  @for ($i = 1; $i <= 5; $i++)
+                                  <a href="#"><i class="fa {{$i<=$averageSaleRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                                  @endfor
+                              </div>
+                          <h5><a href="{{route('get.detail.product',[$getSingleDescMan->pro_slug,$getSingleDescMan->id])}}">{{$getSingleDescMan->pro_name}}</a></h5>
+                          @if($getSingleDescMan->pro_sale > 0)
+                          <span class="old-price">{{number_format($getSingleDescMan->pro_price,0,'','.')}} đ</span>
+                          <span class="pro-price">{{get_cal_sale($getSingleDescMan->pro_price,
+                          $getSingleDescMan->pro_sale)}} đ</span>
+                           @else
+                           <span class="pro-price">{{number_format($getSingleDescMan->pro_price,0,'','.')}} đ</span>
+                           @endif
                           </div>
                         </div>
                       </div>
@@ -638,8 +806,8 @@
                         {{$listArticle->a_description}}</p>
                         <a class="read-more" href="{{route('get.detail.article',
                         [$listArticle->a_slug,$listArticle->id])}}">Đọc thêm</a>
-                        <span class="recent-comment"><a href="#"><i class="fa fa-comment-o">
-                            </i> 0 bình luận</a></span>
+                        <span class="recent-comment"><a href="#"><i class="fa fa-eye">
+                            </i> {{$listArticle->a_view}} lượt xem</a></span>
                     </div>
                     </div>
                 </div>
@@ -743,35 +911,4 @@
         //cử 1000 mili giây(1s) là thực hiện hàm makeTimer một lần
     </script>
 @endsection
-@section('script')
-    <script>
 
-        $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-        });
-        // //token thêm ở header dưới dạng meta
-        //hàm scroll để show ra sản phẩm vừa xem
-        $(document).ready(function(){
-            let urlRenderViewProduct = "{{route('render.view.product')}}";
-            $(window).scroll(function(){
-                if ($(window).scrollTop() > 1200) {
-                    //lấy danh sách id sản phẩm
-                    products = sessionStorage.getItem('products');
-                    products = $.parseJSON(products);
-                    //hàm ajax xử lý dử liệu
-                    $.ajax({
-                        url : urlRenderViewProduct,
-                        type: "POST",
-                        data : {
-                            listId : products
-                        }
-                    }).done(function(result){
-                        $('#renderViewProduct').html('').append(result);
-                    })
-                }
-            })
-        })
-    </script>
-@endsection

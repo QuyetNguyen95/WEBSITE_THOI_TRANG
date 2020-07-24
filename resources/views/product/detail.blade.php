@@ -54,7 +54,7 @@
 	</div>
 	<!-- breadcrumb-area end -->
 	<!-- product-main-area start -->
-	<div class="product-main-area" data-id="{{$getDetailProduct->id}}">
+    <div class="product-main-area" >
 		<div class="container">
 			<div class="row">
 				<!-- product-page-photo start -->
@@ -77,16 +77,16 @@
 						  <!-- Tab panes -->
 						  <div class="tab-content">
 							<div role="tabpanel" class="tab-pane active" id="one">
-                            <a href="#"><img src="{{pare_url_file($getDetailProduct->pro_avatar)}}" alt="" /></a>
+                            <a href="#"><img src="{{pare_url_file($getDetailProduct->pro_avatar)}}" style="height: 682px" alt="" /></a>
 							</div>
 							<div role="tabpanel" class="tab-pane" id="two">
-                            <a href="#"><img src="{{pare_url_file($getDetailProduct->pro_img)}}" alt="" /></a>
+                            <a href="#"><img src="{{pare_url_file($getDetailProduct->pro_img)}}" style="height: 682px" alt="" /></a>
 							</div>
 							<div role="tabpanel" class="tab-pane" id="three">
-                            <a href="#"><img src="{{pare_url_file($getDetailProduct->pro_avatar)}}" alt="" /></a>
+                            <a href="#"><img src="{{pare_url_file($getDetailProduct->pro_avatar)}}" style="height: 682px" alt="" /></a>
 							</div>
 							<div role="tabpanel" class="tab-pane" id="four">
-                            <a href="#"><img src="{{pare_url_file($getDetailProduct->pro_img)}}" alt="" /></a>
+                            <a href="#"><img src="{{pare_url_file($getDetailProduct->pro_img)}}" style="height: 682px" alt="" /></a>
 							</div>
 						  </div>
 						</div>
@@ -106,11 +106,11 @@
                         }
 
                         ?>
-						<div class="rating" style="color: #999">
+						<div class="pro-rating">
                             @for ($i = 1; $i <= 5; $i++)
-                                <i class="fa fa-star {{$i <= $averageRating ? 'active' : ''}}"></i>
+                            <a href="#"><i class="fa {{$i<=$averageRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
                             @endfor
-						</div>
+                        </div>
 						<div class="stock-status">
                             @if ($getDetailProduct->pro_number > 0)
                                 <p>Còn hàng</p>
@@ -129,6 +129,9 @@
 						</div>
 						<div class="pro-shor-desc">
 							<p>{{$getDetailProduct->pro_description}}</p>
+                        </div>
+                        <div class="pro-shor-desc">
+							<p>Lượt xem: {{$getDetailProduct->pro_view}}</p>
                         </div>
                     <form action="{{route('add.products.shopping',$getDetailProduct->id)}}" method="post">
                         @csrf
@@ -158,11 +161,12 @@
                             @else
                             <button type="button">Hết hàng</button>
                             @endif
+                            <a href="{{route('get.add.favourite.user',$getDetailProduct->id)}}" class="js-add-favourite">
+                                <button type="button" style="margin-left: 27px;background-color: #fed700;">
+                                    Yêu thích
+                                </button>
+                            </a>
             			</div>
-						<div class="product-wishlist">
-							<a href="#"><i class="fa fa-heart-o"></i></a>
-							<a href="#"><i class="fa fa-toggle-off"></i></a>
-						</div>
                         </form>
 					</div>
 				</div>
@@ -316,7 +320,8 @@
                                                             <li>
                                                                 <div class="comments-details">
                                                                     <div class="comments-list-img">
-                                                                        <img src="{{asset('img/blog/comments/2.jpg')}}" alt="" />
+                                                                        <img style="width: 50px; height: 50px;" src="{{$singleRating->user->avatar != NULL ?
+                                                                        pare_url_file($singleRating->user->avatar):asset('img/blog/comments/1.jpg')}}" alt="" />
                                                                     </div>
                                                                     <div class="comments-content-wrap" style="font-size: 14px;">
                                                                         <div style="margin-bottom: 10px">
@@ -349,7 +354,8 @@
                                                                 <li class="threaded-comments">
                                                                     <div class="comments-details">
                                                                         <div class="comments-list-img">
-                                                                            <img src="{{asset('img/blog/comments/1.jpg')}}" alt="" />
+                                                                            <img style="width: 50px; height: 50px;" src="{{$item->user->avatar != NULL ?
+                                                                            pare_url_file($item->user->avatar):asset('img/blog/comments/1.jpg')}}" alt="" />
                                                                         </div>
                                                                         <div class="comments-content-wrap" style="font-size: 14px">
                                                                             <span style="font-weight: 600">
@@ -417,11 +423,17 @@
                                         </div>
                                     </div>
                                     <div class="product-content">
+                                        <?php
+                                            $averageRating = 0;
+                                            if ($relateProduct->pro_total_rating > 0) {
+                                                $averageRating = $relateProduct->pro_total_number/$relateProduct->pro_total_rating;
+                                            }
+
+                                        ?>
                                         <div class="pro-rating">
-                                            <a href="#"><i class="fa fa-star"></i></a>
-                                            <a href="#"><i class="fa fa-star"></i></a>
-                                            <a href="#"><i class="fa fa-star"></i></a>
-                                            <a href="#"><i class="fa fa-star-o"></i></a>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                            <a href="#"><i class="fa {{$i<=$averageRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                                            @endfor
                                         </div>
                                     <h5><a href="{{route('get.detail.product',[$relateProduct->pro_slug,$relateProduct->id])}}"
                                          style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
@@ -482,11 +494,17 @@
                                         </div>
                                     </div>
                                     <div class="product-content">
+                                        <?php
+                                        $averageRating = 0;
+                                        if ($saleProduct->pro_total_rating > 0) {
+                                            $averageRating = $saleProduct->pro_total_number/$saleProduct->pro_total_rating;
+                                                }
+
+                                            ?>
                                         <div class="pro-rating">
-                                            <a href="#"><i class="fa fa-star"></i></a>
-                                            <a href="#"><i class="fa fa-star"></i></a>
-                                            <a href="#"><i class="fa fa-star"></i></a>
-                                            <a href="#"><i class="fa fa-star"></i></a>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                            <a href="#"><i class="fa {{$i<=$averageRating ? 'fa-star' : 'fa-star-o'}}"></i></a>
+                                            @endfor
                                         </div>
                                         <h5><a href="{{route('get.detail.product',[$saleProduct->pro_slug,$saleProduct->id])}}"
                                         style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;
@@ -568,10 +586,10 @@
                 //   1: i.fa.fa-star
                 //   2: i.fa.fa-star
                 //   3: i.fa.fa-star
-                //   4: i.fa.fa-star}
+                //   4: i.fa.fa-star
                 let listStar = $('.list_star .fa');
                 //list danh sách các list_text
-
+                console.log(listStar)
                 let listRatingText = {
                     1 : "Không thích",
                     2 : "Tạm được",
@@ -581,10 +599,10 @@
                 }
 
                 listStar.mouseover(function(){
-                    //lấy số sao từ data-key
+                    //lấy số sao từ data-key(1, 2,3,4,5 sao)
                     let number = $(this).attr('data-key');
                     //set value cho number_rating để gửi dang database
-
+                    //number chạy từ 1->5
                     $('.number_rating').val(number);
                     //vòng lặp chọn sao
                     $.each(listStar,function(key,value){
@@ -692,37 +710,28 @@
                     })
                 })
            })
-
-           //hàm lưu sản phẩm vừa xem
+           //hàm lưu sản phẩm yêu thích
            $(function(){
-                //lấy id sản phẩm
-                let idProducts = $('.product-main-area').attr("data-id");
-                //lấy giá trị sessionStorage
-                let products = sessionStorage.getItem('products');
-                if (products == null) {
-                    //khởi tạo một mảng để lưu id
-                    let arrayProduct = new Array();
-                    //thêm id của product vào mảng
-                    arrayProduct.push(idProducts);
-                    //khởi tạo sessionStorage
-                    sessionStorage.setItem('products', JSON.stringify(arrayProduct));
-                    //(method) Storage.setItem(key: string, data: string): void có tham số là
-                    //string nên phải chuyển mảng sang string bằng hàm stringify()
-                }else{
-                    // used to parse a JSON string and returns resulting
-                    //JavaScript value or object described by the string.
-                    //chuyển thành mảng
-                    products = $.parseJSON(products);
-                    //check id existed in productsS
-                    if(products.indexOf(idProducts) === -1)
-                    {
-                        //khởi tạo sessionStorage , products đã tồn tại
-                        //thêm id của product vào mảng
-                         products.push(idProducts);
-                         sessionStorage.setItem('products', JSON.stringify(products));
-                    }
-                }
-                console.log(products);
+               $('.js-add-favourite').click(function(e){
+                   e.preventDefault();
+                   let url = $(this).attr('href');
+                   //xử lý ajax
+                   console.log(url);
+
+                   $.ajax({
+                       url: url,
+                       type: "POST",
+                   }).done(function(result){
+                        if(result.messages)
+                        {
+                            alert(result.messages);
+                        }
+                        else
+                        {
+                            alert('Xin hãy đăng nhập trước khi yêu thích');
+                        }
+                   })
+               })
            })
 	</script>
 @endsection

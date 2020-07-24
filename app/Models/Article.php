@@ -16,12 +16,12 @@ class Article extends Model
 
     protected $status = [
     	1 => [
-    		'name'  => 'Public',
+    		'name'  => 'Hiển thị',
     		'class' => 'btn-danger'
     	],
 
     	0 => [
-    		'name'  => 'Private',
+    		'name'  => 'Không',
     		'class' => 'btn-default'
     	]
     ];

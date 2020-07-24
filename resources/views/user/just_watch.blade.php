@@ -1,40 +1,93 @@
 @extends('user.main')
 @section('content')
+<style>
+    .rating .active{
+        color:#ff9705;
+    }
+</style>
 <div class="row">
     <div class="col-12 py-5">
-    <h4>Quản lý sản phẩm vừa xem</h4>
+    <h4>Quản lý sản phẩm đã xem</h4>
     <p class="text-gray">Chào mừng {{Auth::user()->name}}</p>
     </div>
 </div>
-<div id="renderViewProduct">
+<div>
+    <div class="row">
+        <div class="col-md-12 equel-grid">
+            <div class="grid">
+              <div class="grid-body py-3">
+                <p class="card-title ml-n1" style="font-size: 16px;">Sản phẩm đã xem</p>
+              </div>
+              <div class="table-responsive">
+                @if ($products->count() > 0)
+                <table class="table table-hover table-sm">
+                    <thead>
+                      <tr class="solid-header">
+                        <th colspan="2" class="pl-4">Sản phẩm</th>
+                        <th>Sale</th>
+                        <th>Đánh giá</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @if(isset($products))
+                      @foreach($products as $product)
+                      <tr>
+                        <td class="pr-0 pl-4">
+                          <a href="{{route('get.detail.product',[$product->pro_slug,
+                              $product->id])}}">
+                              <img class="profile-img img-sm" src="{{pare_url_file($product->pro_avatar)}}""
+                              alt="profile image" style="width: 30px; height: 30px;">
+                          </a>
+                        </td>
+                        <td class="pl-md-0">
+                          <small class="text-black font-weight-medium d-block">
+                              <span class="status-indicator rounded-indicator small bg-primary" style="display: inline-block;"></span>
+                              <a href="{{route('get.detail.product',[$product->pro_slug,
+                              $product->id])}}">{{mb_strtolower($product->pro_name)}}</a>
+                              </small>
+                          <span class="text-gray">
+                            {{number_format($product->pro_price,0,'','.')}} đ </span>
+                            <span>{{$product->pro_view}} lượt xem</span>
+                        </td>
+                        <td>
+                          <small>Giảm {{$product->pro_sale}}%</small>
+                        </td>
+                        <td>
+                          <?php
+                          $averageRating = 0;
+                          if ($product->pro_total_rating > 0) {
+                              $averageRating = round($product->pro_total_number/$product->pro_total_rating,2);
+                          }
 
+                          ?>
+                          <div class="rating" style="color: #999;display: initial;">
+                              @for ($i = 1; $i <= 5; $i++)
+                                  <i class="mdi mdi-star {{$i <= $averageRating ? 'active' : ''}}"></i>
+                              @endfor
+                              /{{$averageRating}}
+                          </div>
+                        </td>
+                      </tr>
+                      @endforeach
+                      @endif
+                    </tbody>
+                  </table>
+                @else
+                <div style="margin-left: 35%; margin-top: 32px;margin-bottom: 50px;">
+                <img style="margin-bottom: 20px" src="{{asset('img/download.png')}}" alt="">
+                <p style="margin-bottom: 20px; margin-left: -129px;">Hãy đến xem và mua những sản phẩm tuyện vời và hợp với túi tiền</p>
+                <a href="{{route('home')}}" style="padding: 11px;">
+                    <button type="button" class="btn btn-success">Tiếp tục mua sắp</button>
+                </a>
+                </div>
+                @endif
+              </div>
+            </div>
+          </div>
+    </div>
 </div>
-@endsection
-@section('script')
-    <script>
-
-        $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-        });
-        // //token thêm ở header dưới dạng meta
-            let urlRenderViewProduct = "{{route('get.view.just.watch.user')}}";
-            //lấy danh sách id sản phẩm
-            products = sessionStorage.getItem('products');
-            products = $.parseJSON(products);
-            //hàm ajax xử lý dử liệu
-            console.log(products);
-
-            $.ajax({
-                url : urlRenderViewProduct,
-                type: "POST",
-                data : {
-                    listId : products
-                }
-            }).done(function(result){
-                $('#renderViewProduct').html('').append(result);
-            })
-    </script>
+<div class="pull-right" style="margin-top: 50px">
+    {{$products->links()}}
+ </div>
 @endsection
 

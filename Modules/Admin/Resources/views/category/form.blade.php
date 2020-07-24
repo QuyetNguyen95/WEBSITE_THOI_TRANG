@@ -21,14 +21,6 @@
                         </div>
                     @endif
                 </div>
-                <div class="form-group">
-                    <label for="name">Meta Title</label>
-                    <input type="text" class="form-control" id="email" placeholder="Meta title" name="c_title_seo" value="{{old('c_title_seo',isset($category->c_title_seo) ? $category->c_title_seo : '')}}">
-                </div>
-                <div class="form-group">
-                    <label for="name">Meta Description</label>
-                    <input type="text" class="form-control" id="email" placeholder="Meta Description" name="c_description_seo" value="{{old('c_description_seo',isset($category->c_description_seo) ? $category->c_description_seo : '')}}">
-                </div>
                 <button type="submit" class="btn btn-success">Lưu thông tin</button>
             </form>
         </div>

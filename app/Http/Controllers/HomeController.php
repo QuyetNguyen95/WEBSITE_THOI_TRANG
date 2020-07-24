@@ -24,9 +24,8 @@ class HomeController extends FrontendController
         //Lấy danh mục nổi bật
 
     	$getListHotAndActiveProduct = Product::where([
-    		'pro_active' => Product::STATUS_PUBLIC,
-    		'pro_hot'	 => Product::HOT_PUBLIC
-        ])->limit(10)->get();
+    		'pro_hot' => Product::STATUS_PUBLIC
+        ])->limit(12)->get();
 
         //lấy các sản phẩm cùng loại bạn đã mua
         $listProduct = [];
@@ -43,6 +42,15 @@ class HomeController extends FrontendController
             //Láy thông tin sản phẩm dựa vào listIdCategory
             $listProduct = Product::whereIn('pro_category_id',$listIdCategory)->limit(6)
             ->orderBy('id','desc')->get();
+        }
+        //lấy các sản phẩm đã xem
+        $listViewedProduct = [];
+        if(get_data_user('web'))
+        {
+            $userId = get_data_user('web');//id user
+            $listViewedProduct =Product::whereHas('viewed', function ($query) use ($userId) {
+            $query->where('vp_user_id',$userId);
+             })->orderBy('id','desc')->get();
         }
 
             // code cùi nhưng chưa biết làm sao
@@ -126,7 +134,6 @@ class HomeController extends FrontendController
             //show tin tức ra ngoài màn hình chính, show 3 tin tức hot and active
 
             $listArticles = Article::where([
-            'a_active' => Article::STATUS_PUBLIC,
             'a_hot'    => Article::HOT_PUBLIC
             ])->orderBy('id','desc')->limit(5)->get();
 
@@ -173,7 +180,8 @@ class HomeController extends FrontendController
             'bannerProduct3'             => $bannerProduct3,
             'bannerProduct4'             => $bannerProduct4,
             'bannerProduct6'             => $bannerProduct6,
-            'listProduct'                => $listProduct
+            'listProduct'                => $listProduct,
+            'listViewedProduct'          => $listViewedProduct
         ];
 
 
@@ -181,22 +189,11 @@ class HomeController extends FrontendController
     	return view('home.index',$data);
     }
 
-
+    //Xem nhanh sản phẩm không load trang
     public function quickView($id)
     {
         $product = Product::find($id);
         $html = view('home.quickProduct',compact('product'))->render();
         return \response()->json($html);
-    }
-
-    public function renderViewProduct(Request $request)
-    {
-        if($request->ajax())
-        {
-            $listId = $request->listId;
-            $justWatchProducts = Product::whereIn('id',$listId)->limit(4)->get();
-            $html = view("home.just_watch_product",compact('justWatchProducts'))->render();
-            return response()->json($html);
-        }
     }
 }

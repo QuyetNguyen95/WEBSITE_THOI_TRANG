@@ -1,6 +1,7 @@
 <div class="">
     <form action="" method="POST" enctype="multipart/form-data">
         @csrf
+       <div class="row">
         <div class="col-sm-8">
             <div class="form-group">
                 <label for="pro_name">Tên sản phẩm</label>
@@ -82,9 +83,14 @@
                 <label for="name">% Khuyến mãi</label>
                 <input type="number" name="pro_sale" placeholder="% giảm giá" class="form-control" value="{{old('pro_sale',isset($product->pro_sale) ? $product->pro_sale : '0')}}" min="0">
             </div>
+           @if (isset($product->id))
+           <div class="form-group">
+            <label for="name">Số lượng sản phẩm hiện tại trong kho là {{$product->pro_number}} cái</label>
+            </div>
+           @endif
             <div class="form-group">
                 <label for="name">Số lượng sản phẩm</label>
-                <input type="number" name="pro_number" placeholder="0" class="form-control" value="{{old('pro_number',isset($product->pro_number) ? $product->pro_number : '0')}}" min="0">
+                <input type="number" name="pro_number" placeholder="0" class="form-control" value="0" min="0">
             </div>
             <div class="form-group">
                 <img src="{{isset($product->pro_avatar) ? pare_url_file($product->pro_avatar) : asset('images/no_image.png')}}" alt="" style="width: 300px; height: 300px;" id="output_img">
@@ -101,6 +107,7 @@
                 <input type="file" name="avatar2" class="form-control" onchange="readURL2(this);">
             </div>
         </div>
+       </div>
     </form>
 </div>
 <script>

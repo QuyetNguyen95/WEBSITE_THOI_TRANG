@@ -19,7 +19,7 @@ class AdminCategoryController extends AdminHeaderController
 
     public function index()
     {
-        $categories = Category::select('id','c_name','c_title_seo','c_active','c_home')->get();
+        $categories = Category::select('id','c_name','c_active')->get();
         return view('admin::category.index',compact('categories'));
     }
     public function create()
@@ -52,8 +52,6 @@ class AdminCategoryController extends AdminHeaderController
         $category->c_name            = $requestCategory->name;
         $category->c_slug            = str_slug($requestCategory->name);
         $category->c_icon            = $requestCategory->icon;
-        $category->c_title_seo       = $requestCategory->c_title_seo ? $requestCategory->c_title_seo : $requestCategory->name;
-        $category->c_description_seo = $requestCategory->c_description_seo;
         $category->save();
     }
 
