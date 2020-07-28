@@ -82,7 +82,7 @@ class AdminTransactionController extends AdminHeaderController
     }
     public function viewOrder(Request $request, $id)
     {
-        $totalTransaction = Transaction::select('tr_total')->
+        $totalTransaction = Transaction::select('tr_total')->find($id);
         $orders = Order::with("product")->where("or_transaction_id",$id)->get();//lay du lieu cua chi tiet don hang
         return  view('admin::components.order',compact('orders','totalTransaction'));
     }

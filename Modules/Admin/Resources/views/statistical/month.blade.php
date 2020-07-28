@@ -22,6 +22,29 @@
                 </div>
             </div>
             </div>
+            <div class="row" style="margin-bottom: 30px">
+                <div class="col-md-6">
+                   <form class="form-inline" method="get" action="">
+                     <div class="form-group" style="margin-left: 10px;margin-right: 10px;">
+                        <select name="month" id="" class="form-control">
+                            <option value="">Chọn tháng</option>
+                            @for ($i = 1; $i <= 12; $i++)
+                            <option value="{{ $i }}" {{ Request::get('month') == $i ? 'selected' : '' }}>{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                            @endfor
+                        </select>
+                     </div>
+                    <div class="form-group" style="margin-left: 10px;margin-right: 10px;">
+                        <select name="year" id="" class="form-control">
+                            <option value="">Chọn năm</option>
+                            @for ($i = 2010; $i <= 2020; $i++)
+                            <option value="{{ $i }}" {{ Request::get('year') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                            @endfor
+                        </select>
+                    </div>
+                  <button type="submit" class="btn btn-sm btn-outline-info"><i class="mdi mdi-magnify"></i></button>
+                </form>
+                </div>
+            </div>
             <div class="row">
                <div class="col-md-12">
                    <table class="table">

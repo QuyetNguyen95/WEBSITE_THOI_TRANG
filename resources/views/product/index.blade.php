@@ -202,12 +202,6 @@
                                           alt="" style="width: 262px; height: 345px;" />
                                     </a>
                                     <a class="modal-view" href="{{route('get.quickView.product',$singleProduct->id)}}" >Quick View</a>
-                                    <div class="action-buttons">
-                                       <a class="add-to-cart" href="#"><i class="fa fa-shopping-cart"></i> <span>Thêm vào giỏ</span></a>
-                                       <a class="favourite" href="#"><i class="fa fa-heart-o"></i></a>
-                                       <a class="compare" href="{{route('get.detail.product',
-                                       [$singleProduct->pro_slug,$singleProduct->id])}}"><i class="fa fa-toggle-off"></i></a>
-                                    </div>
                                  </div>
                                  <?php
                                     $averageRating = 0;
